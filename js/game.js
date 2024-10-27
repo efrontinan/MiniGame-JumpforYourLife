@@ -5,7 +5,7 @@ const Game = {
         height: window.innerHeight,
         padding: {
             topbottom: 20,
-            leftright: 20   
+            leftright: 20
         }
     },
 
@@ -16,6 +16,7 @@ const Game = {
     obstacles: [],
 
     floorNumber: 5,
+    floorArray: [],
 
     obstacleDensity: 0,
 
@@ -43,7 +44,9 @@ const Game = {
     start() {
 
         this.createElements()
-        console.log(document.querySelectorAll('eachFloor'))
+        this.randomPlatform()
+        this.randomPlatform()
+
 
     },
 
@@ -51,21 +54,53 @@ const Game = {
 
         this.background = new Background(this.gameSize)
         this.player = new Player(this.gameSize)
-        this.newFloor()
-        this.platform = new Platform(this.gameSize)
-       
-        
+        this.createFloor()
+        this.createPlatforms()
+
     },
 
-    newFloor (){
-        
-        for(let i = 1; i<= this.floorNumber; i++){
+    createFloor() {
+
+        for (let i = 1; i < this.floorNumber; i++) {
             this.floor = new Floor(this.gameSize, i)
+            this.floorArray.push(this.floor)
+        }
+
+    },
+
+    createPlatforms() {
+
+        this.floorArray.forEach((eachFloor) => {
+            console.log(eachFloor)
+            const number = eachFloor.floorNumber
+            eachFloor.floorPlatforms.push(
+                this.platform = new Platform(this.gameSize, number, this.randomPlatform()),
+                this.platform2 = new Platform(this.gameSize, number, this.randomPlatform()),
+                this.platform3 = new Platform(this.gameSize, number, this.randomPlatform()),
+            )
+
+        })
+
+        console.log(this.floorArray)
+
+
+    },
+
+    randomPlatform() {
+        let randomNumber = Math.random()
+        if (randomNumber >= .5) {
+            console.log(0)
+            return 'duro'
+        }
+        if (randomNumber < .5) {
+            console.log(1)
+            return 'blando'
         }
         
+        
     },
 
-    updateFloor () {
+    updateFloor() {
 
     }
 }
