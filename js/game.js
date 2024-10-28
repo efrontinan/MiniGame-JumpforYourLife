@@ -12,10 +12,11 @@ const Game = {
     framesCounter: 0,
 
     background: undefined,
+
     player: undefined,
 
-    floorNumber: 5,
-    floorArray: [],
+    rowNumber: 5,
+    platformArray: [],
     platformNumer: 3,
 
     platformSpecs: {
@@ -65,39 +66,38 @@ const Game = {
     },
 
     createElements() {
-        this.createFloor()
+        // this.createFloor()
         this.createPlatforms()
         this.background = new Background(this.gameSize)
         this.player = new Player(this.gameSize, this.platformSpecs)
     },
 
-    createFloor() {
-        for (let i = 1; i < this.floorNumber; i++) {
-            this.floor = new Floor(this.gameSize, i)
-            this.floorArray.push(this.floor)
-        }
-    },
+    // createFloor() {
+    //     for (let i = 1; i < this.floorNumber; i++) {
+    //         this.floor = new Floor(this.gameSize, i)
+    //         this.floorArray.push(this.floor)
+    //     }
+    // },
 
     createPlatforms() {
-
-        this.floorArray.forEach((eachFloor) => {
-
-            for (let i = 0; i < this.platformNumer; i++) {
-                const platform = new Platform(this.gameSize, eachFloor.floorNumber, this.platformSpecs, this.getRandomType(), i)
-                eachFloor.floorPlatforms.push(platform)
+        for (let i = 1; i < this.rowNumber; i++) {
+            // this.floor = new Floor(this.gameSize, i)
+            // this.floorArray.push(this.floor)
+            for (let j = 0; j < this.platformNumer; j++) {
+                const platform = new Platform(this.gameSize, i, this.platformSpecs, this.getRandomType(), j)
+                this.platformArray.push(platform)
             }
-
-            if (
-                eachFloor.floorPlatforms[0].type === 'duro' ||
-                eachFloor.floorPlatforms[1].type === 'duro' ||
-                eachFloor.floorPlatforms[2].type === 'duro'
-            ) {
-                // hola?
-            } else {
-                eachFloor.floorPlatforms[0].type = 'duro'
-                eachFloor.floorPlatforms[0].createPlatform()
-            }
-        })
+            // if (
+            //     eachFloor.floorPlatforms[0].type === 'duro' ||
+            //     eachFloor.floorPlatforms[1].type === 'duro' ||
+            //     eachFloor.floorPlatforms[2].type === 'duro'
+            // ) {
+            //     // hola?
+            // } else {
+            //     eachFloor.floorPlatforms[0].type = 'duro'
+            //     eachFloor.floorPlatforms[0].createPlatform()
+            // }
+        }
     },
 
     getRandomType() {
@@ -113,14 +113,14 @@ const Game = {
     },
 
     collisionDetection() {
-        const actualFloor = this.floorArray[0].floorPlatforms
+        // const actualFloor = this.platformArray
         const playerPos = this.player.playerPos
         const playerSize = this.player.playerSize
         // console.log(playerPos.left)
         // console.log(this.player.playerPos.left)
         // console.log(this.player.playerPos.top)
 
-        actualFloor.forEach(eachPlatforms => {
+        this.platformArray.forEach(eachPlatforms => {
             const platformPos = eachPlatforms.platformPos
             const platformSize = eachPlatforms.platformSize
             console.log('player left: ', playerPos.left)

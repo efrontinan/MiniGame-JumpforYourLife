@@ -1,11 +1,11 @@
 class Platform {
-    constructor(gameSize, floorNumber, platformSpecs, type, index) {
+    constructor(gameSize, rowNumber, platformSpecs, type, index) {
 
         this.gameSize = gameSize
 
         this.index = index
 
-        this.floorNumber = floorNumber
+        this.rowNumber = rowNumber
 
         this.type = type
 
@@ -18,7 +18,7 @@ class Platform {
 
         this.platformPos = {
             left: 0,
-            top: ((this.gameSize.height / 5) - this.platformSize.height) / 2
+            top: this.gameSize.height - ((this.gameSize.height / 5) * (this.rowNumber + 1))
         }
 
         this.init()
@@ -34,7 +34,7 @@ class Platform {
         this.platform.style.height = `${this.platformSize.height}px`
         this.platform.style.top = `${this.platformPos.top}px`
 
-        document.querySelector(`#eachFloor${this.floorNumber}`).appendChild(this.platform)
+        document.querySelector(`#game-screen`).appendChild(this.platform)
     }
 
     createPlatform() {
@@ -46,7 +46,7 @@ class Platform {
             this.platform.style.backgroundColor = "black"
         }
 
-        if (this.floorNumber % 2) {
+        if (this.rowNumber % 2) {
             this.platformPos.left = (this.gameSize.width - this.platformSize.width - 20) - ((this.distance + this.platformSize.width) * this.index)
             this.platform.style.left = `${this.platformPos.left}px`
         } else {
