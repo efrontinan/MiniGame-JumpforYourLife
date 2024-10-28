@@ -22,20 +22,37 @@ const Game = {
     platformNumer: 3,
 
     keys: {
+        MOVEUP: 'ArrowUp',
+        MOVERIGHT: 'ArrowRight',
+        MOVELEFT: 'ArrowLeft'
     },
 
     init() {
         this.start()
         this.setDimensions()
+        this.setEventListeners()
+    },
+
+    setEventListeners() {
+        document.addEventListener("keydown", e => {
+            switch (e.code) {
+                case this.keys.MOVEUP:
+                    this.moveUp()
+                    break;
+                case this.keys.MOVERIGHT:
+                    this.moveRight()
+                    break;
+                case this.keys.MOVELEFT:
+                    this.moveLeft()
+                    break;
+            }
+        })
     },
 
     setDimensions() {
         document.querySelector("#game-screen").style.width = `${this.gameSize.width}px`
         document.querySelector("#game-screen").style.height = `${this.gameSize.height}px`
         // document.querySelector("#game-screen").style.padding = `${this.gameSize.padding.topbottom}px`
-    },
-
-    setEventListeners() {
     },
 
     start() {
@@ -46,9 +63,9 @@ const Game = {
 
     createElements() {
         this.background = new Background(this.gameSize)
-        this.player = new Player(this.gameSize)
         this.createFloor()
         this.createPlatforms()
+        this.player = new Player(this.gameSize)
     },
 
     createFloor() {
@@ -89,5 +106,30 @@ const Game = {
 
     updateFloor() {
 
+    },
+
+    moveLeft() {
+        this.player.playerPos.top -= 100
+        this.player.playerPos.left -= 100
+        console.log(this.player.playerPos.left)
+        this.updatePositikon()
+    },
+
+    moveUp() {
+        this.player.playerPos.top -= 100
+        this.updatePosition()
+    },
+
+    moveRight() {
+        this.player.playerPos.top -= 100
+        this.player.playerPos.left += 100
+        console.log(this.player.playerPos.left)
+        this.updatePosition()
+    },
+
+    updatePosition() {
+        console.log(this.player.style.left)
+        // this.player.style.left = `${this.playerPos.left}px`
+        // this.player.style.top = `${this.playerPos.top}px`
     }
 }

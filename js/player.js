@@ -4,10 +4,8 @@ class Player {
         this.gameSize = gameSize
 
         this.playerSize = {
-
             width: 50,
             height: 50
-
         }
 
         this.playerPos = {
@@ -20,11 +18,10 @@ class Player {
     }
 
     init() {
-
+        // console.log(document.querySelectorAll('#eachFloor1'))
         this.player = document.createElement('div')
 
         this.player.style.backgroundColor = "yellow"
-
         this.player.style.position = "absolute"
         this.player.style.width = `${this.playerSize.width}px`
         this.player.style.height = `${this.playerSize.height}px`

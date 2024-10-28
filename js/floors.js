@@ -24,7 +24,6 @@ class Floor {
     init() {
         this.floor = document.createElement('div')
 
-        this.floor.style.backgroundColor = "red"
         this.floor.id = `eachFloor${this.floorNumber}`
         this.floor.style.border = "1px solid #000"
         this.floor.style.boxSizing = "border-box"
