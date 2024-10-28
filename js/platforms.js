@@ -52,8 +52,6 @@ class Platform {
             const rigthPos = 20 + (this.distance + this.platformSize.width) * this.index
             this.platform.style.left = `${rigthPos}px`
         }
-
-        //faltaría implementarle la lógica para que siempre haya 1 duro y al menos 1 blando
     }
 
 }

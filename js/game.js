@@ -60,14 +60,19 @@ const Game = {
 
     createPlatforms() {
         this.floorArray.forEach((eachFloor) => {
-            console.log(eachFloor)
             const number = eachFloor.floorNumber
+            let hasDuro = false
             for (let i = 0; i < this.platformNumer; i++) {
                 this.platform = new Platform(this.gameSize, number, this.randomPlatform(), i)
                 eachFloor.floorPlatforms.push(this.platform)
             }
+
+            if (eachFloor.floorPlatforms[0].type === 'duro' || eachFloor.floorPlatforms[1].type === 'duro' || eachFloor.floorPlatforms[2].type === 'duro') {
+            } else {
+                eachFloor.floorPlatforms[0].type = 'duro'
+                eachFloor.floorPlatforms[0].createPlatform();
+            }
         })
-        // console.log(this.floorArray)
     },
 
     randomPlatform() {
