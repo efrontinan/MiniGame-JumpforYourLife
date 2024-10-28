@@ -1,5 +1,5 @@
 class Player {
-    constructor(gameSize) {
+    constructor(gameSize, platformSpecs) {
 
         this.gameSize = gameSize
 
@@ -12,6 +12,13 @@ class Player {
             left: this.gameSize.width / 2 - this.playerSize.width,
             top: this.gameSize.height - this.playerSize.height - 20,
             base: this.gameSize.height - this.playerSize.height - 20
+        }
+
+        this.distance = platformSpecs.distance
+
+        this.platformSize = {
+            width: platformSpecs.width,
+            height: platformSpecs.height
         }
 
         this.init()
@@ -31,6 +38,25 @@ class Player {
 
         document.querySelector("#game-screen").appendChild(this.player)
 
+    }
+
+    moveLeft() {
+        this.playerPos.top -= this.gameSize.height / 5
+        console.log(this.playerPos.left)
+        this.playerPos.left -= (this.distance + this.platformSize.width)
+        console.log(this.playerPos.left)
+        // this.game.collisionDetection()
+    }
+
+    moveUp() {
+        this.playerPos.top -= this.gameSize.height / 5
+        // this.game.collisionDetection()
+    }
+
+    moveRight() {
+        this.playerPos.top -= this.gameSize.height / 5
+        this.playerPos.left += (this.distance + this.platformSize.width)
+        // this.game.collisionDetection()
     }
 
 }

@@ -1,7 +1,7 @@
 const Game = {
 
     gameSize: {
-        width: window.innerWidth * .7,
+        width: 700,
         height: window.innerHeight,
         padding: {
             topbottom: 20,
@@ -18,7 +18,7 @@ const Game = {
     floorArray: [],
     platformNumer: 3,
 
-    platformsSpecs: {
+    platformSpecs: {
         distance: 150,
         width: 100,
         height: 100
@@ -40,14 +40,16 @@ const Game = {
         document.addEventListener("keydown", e => {
             switch (e.code) {
                 case this.keys.MOVEUP:
-                    this.moveUp()
-                    // this.player.moveUp()
+                    this.player.moveUp()
+                    this.collisionDetection()
                     break;
                 case this.keys.MOVERIGHT:
-                    this.moveRight()
+                    this.player.moveRight()
+                    this.collisionDetection()
                     break;
                 case this.keys.MOVELEFT:
-                    this.moveLeft()
+                    this.player.moveLeft()
+                    this.collisionDetection()
                     break;
             }
         })
@@ -66,7 +68,7 @@ const Game = {
         this.createFloor()
         this.createPlatforms()
         this.background = new Background(this.gameSize)
-        this.player = new Player(this.gameSize)
+        this.player = new Player(this.gameSize, this.platformSpecs)
     },
 
     createFloor() {
@@ -81,7 +83,7 @@ const Game = {
         this.floorArray.forEach((eachFloor) => {
 
             for (let i = 0; i < this.platformNumer; i++) {
-                const platform = new Platform(this.gameSize, eachFloor.floorNumber, this.platformsSpecs, this.getRandomType(), i)
+                const platform = new Platform(this.gameSize, eachFloor.floorNumber, this.platformSpecs, this.getRandomType(), i)
                 eachFloor.floorPlatforms.push(platform)
             }
 
@@ -110,28 +112,6 @@ const Game = {
         }
     },
 
-    updateFloor() {
-
-    },
-
-    moveLeft() {
-        this.player.playerPos.top -= this.gameSize.height / 5
-        this.player.playerPos.left -= (this.platformsSpecs.distance + this.platformsSpecs.width)
-        this.collisionDetection()
-    },
-
-    moveUp() {
-        this.player.playerPos.top -= this.gameSize.height / 5
-        this.collisionDetection()
-    },
-
-    moveRight() {
-        this.player.playerPos.top -= this.gameSize.height / 5
-        this.player.playerPos.left += (this.platformsSpecs.distance + this.platformsSpecs.width)
-        this.collisionDetection()
-    },
-
-
     collisionDetection() {
         const actualFloor = this.floorArray[0].floorPlatforms
         const playerPos = this.player.playerPos
@@ -146,25 +126,30 @@ const Game = {
             console.log('player left: ', playerPos.left)
             console.log('each platform: ', platformPos.left)
             console.log('final platform: ', (platformPos.left + platformSize.width))
-            if ((playerPos.left > platformPos.left && playerPos.left < (platformPos.left + platformSize.width)) ||
-                ((playerPos.left + playerSize.width) < (platformPos.left + platformSize.width) && ((playerPos.left + playerSize.width) > platformPos.left))) {
+            if ((playerPos.left > platformPos.left &&
+                playerPos.left < (platformPos.left + platformSize.width)) ||
+                ((playerPos.left + playerSize.width) < (platformPos.left + platformSize.width) &&
+                    ((playerPos.left + playerSize.width) > platformPos.left))) {
                 // tenemos que comprobar el top position
                 console.log(eachPlatforms)
-                const platformChecked = eachPlatforms.index
+                // const platformChecked = eachPlatforms.index
                 alert('Sos un crack')
                 this.updatePosition()
             } else {
+                //alert('NO DATA')
                 this.updatePosition()
             }
         });
 
-        return platformChecked;
-
+        // return platformChecked;
     },
 
     updatePosition() {
         let player_id = document.querySelector('#player');
         player_id.style.left = `${this.player.playerPos.left}px`
         player_id.style.top = `${this.player.playerPos.top}px`
+    },
+
+    updateFloor() {
     },
 }
