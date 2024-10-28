@@ -38,11 +38,11 @@ class Platform {
     }
 
     createPlatform() {
-        if (this.type === 'duro') {
+        if (this.type === 'stable') {
             this.platform.style.backgroundColor = "white"
         }
 
-        if (this.type === 'blando') {
+        if (this.type === 'weak') {
             this.platform.style.backgroundColor = "black"
         }
 
