@@ -9,17 +9,20 @@ const Game = {
         }
     },
 
-    //Comment corazon
     framesCounter: 0,
 
-    //Js game
     background: undefined,
     player: undefined,
 
-    //Js Floor
     floorNumber: 5,
     floorArray: [],
     platformNumer: 3,
+
+    platformsSpecs: {
+        distance: 150,
+        width: 100,
+        height: 100
+    },
 
     keys: {
         MOVEUP: 'ArrowUp',
@@ -38,6 +41,7 @@ const Game = {
             switch (e.code) {
                 case this.keys.MOVEUP:
                     this.moveUp()
+                    // this.player.moveUp()
                     break;
                 case this.keys.MOVERIGHT:
                     this.moveRight()
@@ -56,14 +60,12 @@ const Game = {
 
     start() {
         this.createElements()
-        this.randomPlatform()
-        this.randomPlatform()
     },
 
     createElements() {
-        this.background = new Background(this.gameSize)
         this.createFloor()
         this.createPlatforms()
+        this.background = new Background(this.gameSize)
         this.player = new Player(this.gameSize)
     },
 
@@ -75,23 +77,31 @@ const Game = {
     },
 
     createPlatforms() {
+
         this.floorArray.forEach((eachFloor) => {
-            const number = eachFloor.floorNumber
+
             for (let i = 0; i < this.platformNumer; i++) {
-                this.platform = new Platform(this.gameSize, number, this.randomPlatform(), i)
-                eachFloor.floorPlatforms.push(this.platform)
+                const platform = new Platform(this.gameSize, eachFloor.floorNumber, this.platformsSpecs, this.getRandomType(), i)
+                eachFloor.floorPlatforms.push(platform)
             }
 
-            if (eachFloor.floorPlatforms[0].type === 'duro' || eachFloor.floorPlatforms[1].type === 'duro' || eachFloor.floorPlatforms[2].type === 'duro') {
+            if (
+                eachFloor.floorPlatforms[0].type === 'duro' ||
+                eachFloor.floorPlatforms[1].type === 'duro' ||
+                eachFloor.floorPlatforms[2].type === 'duro'
+            ) {
+                // hola?
             } else {
                 eachFloor.floorPlatforms[0].type = 'duro'
-                eachFloor.floorPlatforms[0].createPlatform();
+                eachFloor.floorPlatforms[0].createPlatform()
             }
         })
     },
 
-    randomPlatform() {
+    getRandomType() {
+
         let randomNumber = Math.random()
+
         if (randomNumber >= .5) {
             return 'duro'
         }
@@ -105,25 +115,56 @@ const Game = {
     },
 
     moveLeft() {
-        this.player.playerPos.top -= 100
-        this.player.playerPos.left -= 100
-        this.updatePosition()
+        this.player.playerPos.top -= this.gameSize.height / 5
+        this.player.playerPos.left -= (this.platformsSpecs.distance + this.platformsSpecs.width)
+        this.collisionDetection()
     },
 
     moveUp() {
-        this.player.playerPos.top -= 100
-        this.updatePosition()
+        this.player.playerPos.top -= this.gameSize.height / 5
+        this.collisionDetection()
     },
 
     moveRight() {
-        this.player.playerPos.top -= 100
-        this.player.playerPos.left += 100
-        this.updatePosition()
+        this.player.playerPos.top -= this.gameSize.height / 5
+        this.player.playerPos.left += (this.platformsSpecs.distance + this.platformsSpecs.width)
+        this.collisionDetection()
+    },
+
+
+    collisionDetection() {
+        const actualFloor = this.floorArray[0].floorPlatforms
+        const playerPos = this.player.playerPos
+        const playerSize = this.player.playerSize
+        // console.log(playerPos.left)
+        // console.log(this.player.playerPos.left)
+        // console.log(this.player.playerPos.top)
+
+        actualFloor.forEach(eachPlatforms => {
+            const platformPos = eachPlatforms.platformPos
+            const platformSize = eachPlatforms.platformSize
+            console.log('player left: ', playerPos.left)
+            console.log('each platform: ', platformPos.left)
+            console.log('final platform: ', (platformPos.left + platformSize.width))
+            if ((playerPos.left > platformPos.left && playerPos.left < (platformPos.left + platformSize.width)) ||
+                ((playerPos.left + playerSize.width) < (platformPos.left + platformSize.width) && ((playerPos.left + playerSize.width) > platformPos.left))) {
+                // tenemos que comprobar el top position
+                console.log(eachPlatforms)
+                const platformChecked = eachPlatforms.index
+                alert('Sos un crack')
+                this.updatePosition()
+            } else {
+                this.updatePosition()
+            }
+        });
+
+        return platformChecked;
+
     },
 
     updatePosition() {
         let player_id = document.querySelector('#player');
         player_id.style.left = `${this.player.playerPos.left}px`
         player_id.style.top = `${this.player.playerPos.top}px`
-    }
+    },
 }

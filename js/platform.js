@@ -1,5 +1,5 @@
 class Platform {
-    constructor(gameSize, floorNumber, type, index) {
+    constructor(gameSize, floorNumber, platformSpecs, type, index) {
 
         this.gameSize = gameSize
 
@@ -9,17 +9,18 @@ class Platform {
 
         this.type = type
 
-        this.distance = 150
+        this.distance = platformSpecs.distance
 
         this.platformSize = {
-            width: 100,
-            height: 100
+            width: platformSpecs.width,
+            height: platformSpecs.height
         }
 
         this.platformPos = {
-            top: ((this.gameSize.height / 5) - this.platformSize.height) / 2,
-            base: this.gameSize.height - this.platformSize.height - 20
+            left: 0,
+            top: ((this.gameSize.height / 5) - this.platformSize.height) / 2
         }
+
         this.init()
     }
 
@@ -46,11 +47,11 @@ class Platform {
         }
 
         if (this.floorNumber % 2) {
-            const leftPos = (this.gameSize.width - this.platformSize.width - 20) - ((this.distance + this.platformSize.width) * this.index)
-            this.platform.style.left = `${leftPos}px`
+            this.platformPos.left = (this.gameSize.width - this.platformSize.width - 20) - ((this.distance + this.platformSize.width) * this.index)
+            this.platform.style.left = `${this.platformPos.left}px`
         } else {
-            const rigthPos = 20 + (this.distance + this.platformSize.width) * this.index
-            this.platform.style.left = `${rigthPos}px`
+            this.platformPos.left = 20 + (this.distance + this.platformSize.width) * this.index
+            this.platform.style.left = `${this.platformPos.left}px`
         }
     }
 
