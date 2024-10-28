@@ -52,7 +52,6 @@ const Game = {
     setDimensions() {
         document.querySelector("#game-screen").style.width = `${this.gameSize.width}px`
         document.querySelector("#game-screen").style.height = `${this.gameSize.height}px`
-        // document.querySelector("#game-screen").style.padding = `${this.gameSize.padding.topbottom}px`
     },
 
     start() {
@@ -78,7 +77,6 @@ const Game = {
     createPlatforms() {
         this.floorArray.forEach((eachFloor) => {
             const number = eachFloor.floorNumber
-            let hasDuro = false
             for (let i = 0; i < this.platformNumer; i++) {
                 this.platform = new Platform(this.gameSize, number, this.randomPlatform(), i)
                 eachFloor.floorPlatforms.push(this.platform)
@@ -95,11 +93,9 @@ const Game = {
     randomPlatform() {
         let randomNumber = Math.random()
         if (randomNumber >= .5) {
-            // console.log(0)
             return 'duro'
         }
         if (randomNumber < .5) {
-            // console.log(1)
             return 'blando'
         }
     },
@@ -111,8 +107,7 @@ const Game = {
     moveLeft() {
         this.player.playerPos.top -= 100
         this.player.playerPos.left -= 100
-        console.log(this.player.playerPos.left)
-        this.updatePositikon()
+        this.updatePosition()
     },
 
     moveUp() {
@@ -123,13 +118,12 @@ const Game = {
     moveRight() {
         this.player.playerPos.top -= 100
         this.player.playerPos.left += 100
-        console.log(this.player.playerPos.left)
         this.updatePosition()
     },
 
     updatePosition() {
-        console.log(this.player.style.left)
-        // this.player.style.left = `${this.playerPos.left}px`
-        // this.player.style.top = `${this.playerPos.top}px`
+        let player_id = document.querySelector('#player');
+        player_id.style.left = `${this.player.playerPos.left}px`
+        player_id.style.top = `${this.player.playerPos.top}px`
     }
 }

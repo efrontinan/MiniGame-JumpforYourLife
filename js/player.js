@@ -21,6 +21,7 @@ class Player {
         // console.log(document.querySelectorAll('#eachFloor1'))
         this.player = document.createElement('div')
 
+        this.player.id = "player"
         this.player.style.backgroundColor = "yellow"
         this.player.style.position = "absolute"
         this.player.style.width = `${this.playerSize.width}px`
