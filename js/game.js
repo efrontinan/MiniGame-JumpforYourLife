@@ -1,5 +1,8 @@
 const Game = {
 
+    inactivityTimer: null, // Para rastrear la inactividad
+    inactivityLimit: 5000, // 5 segundos de inactividad
+
     gameSize: {
         width: 700,
         height: window.innerHeight,
@@ -39,6 +42,7 @@ const Game = {
         this.setDimensions()
         this.setEventListeners()
         this.updateFloor(); // Inicia el movimiento de las plataformas
+        this.startInactivityTimer(); // Inicia el temporizador de inactividad
     },
 
     setEventListeners() {
@@ -47,14 +51,17 @@ const Game = {
                 case this.keys.MOVEUP:
                     this.player.moveUp()
                     this.collisionDetection()
+                    this.resetInactivityTimer() // Reinicia el temporizador de inactividad
                     break;
                 case this.keys.MOVERIGHT:
                     this.player.moveRight()
                     this.collisionDetection()
+                    this.resetInactivityTimer() // Reinicia el temporizador de inactividad
                     break;
                 case this.keys.MOVELEFT:
                     this.player.moveLeft()
                     this.collisionDetection()
+                    this.resetInactivityTimer() // Reinicia el temporizador de inactividad
                     break;
             }
         })
@@ -78,13 +85,13 @@ const Game = {
     createPlatforms() {
         for (let i = 1; i < this.rowNumber; i++) {
             for (let j = 0; j < this.platformNumer; j++) {
-                const platform = new Platform(this.gameSize, i, this.platformSpecs, this.getRandomType(), j);
+                const platform = new Platform(this.gameSize, i, this.platformSpecs, this.getRandomType(), j)
 
                 // Asigna dirección basada en el grupo: derecha (1) o izquierda (-1)
-                const groupIndex = Math.floor((this.platformArray.length) / 3);
-                platform.direction = groupIndex % 2 === 0 ? 1 : -1;
+                const groupIndex = Math.floor((this.platformArray.length) / 3)
+                platform.direction = groupIndex % 2 === 0 ? 1 : -1
 
-                this.platformArray.push(platform);
+                this.platformArray.push(platform)
             }
         }
     },
@@ -125,13 +132,13 @@ const Game = {
                 isColliding = true;
                 this.onPlatform = true;
                 this.plaformNumber.push(eachPlatform.rowNumber, eachPlatform.index, platformPos.left, platformPos.top);
-                this.updatePosition();
+                this.updatePosition()
             }
         });
 
         // Si no hay colisión, muestra el modal de "Perdiste"
         if (!isColliding) {
-            this.showLoseModal();
+            this.showLoseModal()
         }
 
         return this.onPlatform;
@@ -155,6 +162,10 @@ const Game = {
 
         // Reinicia otros elementos si es necesario (ej. contador de frames)
         this.framesCounter = 0;
+
+        // Reinicia tiempo de actividad
+        this.resetInactivityTimer()
+
     },
 
     updatePosition() {
@@ -187,5 +198,16 @@ const Game = {
                 return true; // Mantiene en el array
             });
         }, 20); // Ejecuta cada 20ms para un movimiento fluido
-    }
+    },
+
+    startInactivityTimer() {
+        this.inactivityTimer = setTimeout(() => {
+            this.showLoseModal() // Muestra el modal de "Perdiste" si no hay movimiento
+        }, this.inactivityLimit)
+    },
+
+    resetInactivityTimer() {
+        clearTimeout(this.inactivityTimer); // Limpia el temporizador anterior
+        this.startInactivityTimer() // Inicia un nuevo temporizador
+    },
 }
