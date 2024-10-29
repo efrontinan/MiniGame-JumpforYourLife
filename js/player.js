@@ -38,13 +38,29 @@ class Player {
 
         document.querySelector("#game-screen").appendChild(this.player)
 
+        // Crear el marco de límite de salto
+        this.createMovementLimitFrame();
+    }
+
+    createMovementLimitFrame() {
+        const movementLimitFrame = document.createElement('div');
+        movementLimitFrame.id = 'movement-limit-frame';
+        movementLimitFrame.style.position = 'absolute';
+        movementLimitFrame.style.left = `${(this.playerPos.left) - (this.distance + this.platformSize.width)}px`; // Límite izquierdo
+        movementLimitFrame.style.top = `${(this.playerPos.top) - (this.gameSize.height / 5) - 100}px`; // Límite superior
+        movementLimitFrame.style.width = `${(this.gameSize.width) - this.platformSize.width}px`; // Ancho igual al del juego
+        movementLimitFrame.style.height = `${this.gameSize.height}px`; // Alto igual al del juego
+        movementLimitFrame.style.border = '2px solid yellow'; // Color y grosor del marco
+        movementLimitFrame.style.boxSizing = 'border-box'; // Incluye el borde en el tamaño total
+
+        document.querySelector("#game-screen").appendChild(movementLimitFrame);
     }
 
     moveLeft() {
         this.playerPos.top -= this.gameSize.height / 5
-        console.log(this.playerPos.left)
+        // console.log(this.playerPos.left)
         this.playerPos.left -= (this.distance + this.platformSize.width)
-        console.log(this.playerPos.left)
+        // console.log(this.playerPos.left)
         // this.game.collisionDetection()
     }
 
