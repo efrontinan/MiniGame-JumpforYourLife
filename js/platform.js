@@ -1,5 +1,7 @@
 class Platform {
-    constructor(gameSize, rowNumber, platformSpecs, type, index) {
+    constructor(gameSize, rowNumber, platformSpecs, type, index, uniqueId) {
+
+        this.uniqueId = uniqueId
 
         this.gameSize = gameSize
 
@@ -21,12 +23,16 @@ class Platform {
             top: this.gameSize.height - ((this.gameSize.height / 5) * (this.rowNumber + 1))
         }
 
+        this.direction 
+
+
         this.init()
     }
 
     init() {
         this.platform = document.createElement('div')
         this.createPlatform()
+        this.setDirection()
 
         this.platform.style.border = "1px solid #000"
         this.platform.style.position = "absolute"
@@ -52,6 +58,15 @@ class Platform {
         } else {
             this.platformPos.left = 20 + (this.distance + this.platformSize.width) * this.index
             this.platform.style.left = `${this.platformPos.left}px`
+
+        }
+    }
+
+    setDirection() {
+        if(this.rowNumber % 2 === 0){
+           this.direction= 1
+        } else {
+            this.direction= -1
         }
     }
 

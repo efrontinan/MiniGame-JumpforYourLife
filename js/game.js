@@ -1,7 +1,7 @@
 const Game = {
 
-    inactivityTimer: null, // Para rastrear la inactividad
-    inactivityLimit: 5000, // 5 segundos de inactividad
+    inactivityTimer: null, 
+    inactivityLimit: 5000, 
 
     gameSize: {
         width: 700,
@@ -28,8 +28,10 @@ const Game = {
         height: 100
     },
 
-    onPlatform: false,
-    plaformNumber: [],
+    isColliding: false,
+    currentPlatform: [],
+
+    interval: '',
 
     keys: {
         MOVEUP: 'ArrowUp',
@@ -41,8 +43,8 @@ const Game = {
         this.start()
         this.setDimensions()
         this.setEventListeners()
-        this.updateFloor(); // Inicia el movimiento de las plataformas
-        this.startInactivityTimer(); // Inicia el temporizador de inactividad
+        // this.updateFloor(); // Inicia el movimiento de las plataformas
+        // this.startInactivityTimer();
     },
 
     setEventListeners() {
@@ -51,17 +53,17 @@ const Game = {
                 case this.keys.MOVEUP:
                     this.player.moveUp()
                     this.collisionDetection()
-                    this.resetInactivityTimer() // Reinicia el temporizador de inactividad
+                    // this.resetInactivityTimer() 
                     break;
                 case this.keys.MOVERIGHT:
                     this.player.moveRight()
                     this.collisionDetection()
-                    this.resetInactivityTimer() // Reinicia el temporizador de inactividad
+                    // this.resetInactivityTimer() 
                     break;
                 case this.keys.MOVELEFT:
                     this.player.moveLeft()
                     this.collisionDetection()
-                    this.resetInactivityTimer() // Reinicia el temporizador de inactividad
+                    // this.resetInactivityTimer() 
                     break;
             }
         })
@@ -74,6 +76,7 @@ const Game = {
 
     start() {
         this.createElements()
+        this.startGameLoop()
     },
 
     createElements() {
@@ -83,15 +86,40 @@ const Game = {
     },
 
     createPlatforms() {
+
+        let uniqueId = 0
+
         for (let i = 1; i < this.rowNumber; i++) {
+
             for (let j = 0; j < this.platformNumer; j++) {
-                const platform = new Platform(this.gameSize, i, this.platformSpecs, this.getRandomType(), j)
 
-                // Asigna dirección basada en el grupo: derecha (1) o izquierda (-1)
-                const groupIndex = Math.floor((this.platformArray.length) / 3)
-                platform.direction = groupIndex % 2 === 0 ? 1 : -1
-
+                const platform = new Platform(this.gameSize, i, this.platformSpecs, this.getRandomType(), j, uniqueId)
                 this.platformArray.push(platform)
+
+                uniqueId++
+
+            }
+        }
+
+        hasStablePlatform = false
+
+        for (let i = 1; i < this.rowNumber; i++) {
+            const rowArray = this.platformArray.filter(eachPlatform => {
+                return eachPlatform.rowNumber === i
+            })
+            if (rowArray.some(eachPlatform => eachPlatform.type === 'stable')) {
+                hasStablePlatform = true
+            } else {
+                hasStablePlatform = false
+                rowArray[0].type = 'stable';
+                rowArray[0].createPlatform();
+            }
+            if (rowArray.some(eachPlatform => eachPlatform.type === 'weak')) {
+                hasStablePlatform = true
+            } else {
+                hasStablePlatform = false
+                rowArray[1].type = 'weak';
+                rowArray[1].createPlatform();
             }
         }
     },
@@ -109,105 +137,127 @@ const Game = {
     },
 
     collisionDetection() {
+
         const playerPos = this.player.playerPos;
         const playerSize = this.player.playerSize;
-        let isColliding = false;
 
-        this.platformArray.forEach(eachPlatform => {
+
+
+        this.platformArray.forEach((eachPlatform, idx) => {
             const platformPos = eachPlatform.platformPos;
             const platformSize = eachPlatform.platformSize;
 
             if (
-                (playerPos.left > platformPos.left &&
-                    playerPos.left < (platformPos.left + platformSize.width) &&
-                    playerPos.top > platformPos.top &&
-                    playerPos.top < platformPos.top + platformSize.height
-                )
-                ||
-                ((playerPos.left + playerSize.width) < (platformPos.left + platformSize.width) &&
-                    ((playerPos.left + playerSize.width) > platformPos.left)) &&
-                (playerPos.top + playerSize.height) < (platformPos.top + platformSize.height) &&
-                (playerPos.top + playerSize.height) > (platformPos.top)
-            ) {
-                isColliding = true;
-                this.onPlatform = true;
-                this.plaformNumber.push(eachPlatform.rowNumber, eachPlatform.index, platformPos.left, platformPos.top);
-                this.updatePosition()
-            }
-        });
+                playerPos.left < platformPos.left + platformSize.width &&
+                playerPos.left + playerSize.width > platformPos.left &&
+                playerPos.top < platformPos.top + platformSize.height &&
+                playerPos.top + playerSize.height > platformPos.top
 
-        // Si no hay colisión, muestra el modal de "Perdiste"
-        if (!isColliding) {
-            this.showLoseModal()
+            ) {
+                this.isColliding = true;
+                this.currentPlatform = [idx, eachPlatform.rowNumber, eachPlatform.index, platformPos.left, platformPos.top, eachPlatform.type];
+                this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
+
+                if (eachPlatform.type === 'weak') {
+                    this.gameOver()
+                }
+
+                throw this.isColliding
+            } else {
+                this.isColliding = false;
+            }
+        })
+
+        if (!this.isColliding) {
+            this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
+            this.gameOver()
+
         }
 
         return this.onPlatform;
     },
 
-    showLoseModal() {
-        document.getElementById("lose-modal").style.display = "flex";
-    },
+
 
     resetGame() {
-        // Oculta el modal de "Perdiste"
-        document.getElementById("lose-modal").style.display = "none";
+        document.getElementById("lose-modal").style.display = "none"
 
-        // Reinicia la posición del jugador
-        this.player.resetPosition(); // Asegúrate de definir `resetPosition` en tu clase Player para la posición inicial
+        this.startGameLoop()
+        
+        this.player.resetPosition()
+        
 
-        // Limpia y vuelve a crear las plataformas
-        this.platformArray.forEach(platform => platform.platform.remove()); // Elimina del DOM
-        this.platformArray = []; // Vacía el array de plataformas
-        this.createPlatforms(); // Vuelve a crear las plataformas
+        this.platformArray.forEach(elm => {
+            elm.platform.remove()
+        } )
+        this.platformArray = []
+        this.createPlatforms()
 
-        // Reinicia otros elementos si es necesario (ej. contador de frames)
-        this.framesCounter = 0;
+        this.currentPlatform= []
 
-        // Reinicia tiempo de actividad
-        this.resetInactivityTimer()
+        this.framesCounter = 0
+
+        // this.resetInactivityTimer()
 
     },
 
-    updatePosition() {
-        let player_id = document.querySelector('#player');
 
-        const leftIndex = this.plaformNumber.length - 2;
-        const topIndex = this.plaformNumber.length - 1;
 
-        // Actualiza las posiciones de acuerdo a estos índices
-        player_id.style.left = `${this.plaformNumber[leftIndex] + (this.player.playerSize.width / 2)}px`;
-        player_id.style.top = `${this.plaformNumber[topIndex] + (this.player.playerSize.height / 2)}px`;
+    startGameLoop() {
+
+        interval = setInterval(() => {
+
+            this.movePlatforms()
+            this.updateElements()
+
+            // if(this.platformArray.length < 12){
+            //     this.createPlatforms()
+            // }
+
+
+        }, 40)
+
     },
 
-    updateFloor() {
-        setInterval(() => {
-            this.platformArray = this.platformArray.filter((platform) => {
-                // Mueve la plataforma según su dirección asignada
-                platform.platformPos.left += 2 * platform.direction;
-                platform.platform.style.left = `${platform.platformPos.left}px`;
-
-                // Verifica si la plataforma ha excedido los límites
-                const exceedsRight = platform.platformPos.left >= this.gameSize.width;
-                const exceedsLeft = platform.platformPos.left + platform.platformSize.width <= 0;
-
-                // Elimina la plataforma del array si excede los límites del juego
-                if (exceedsRight || exceedsLeft) {
-                    platform.platform.remove(); // Remueve del DOM
-                    return false; // Excluye del array
-                }
-                return true; // Mantiene en el array
-            });
-        }, 20); // Ejecuta cada 20ms para un movimiento fluido
+    movePlatforms() {
+        this.platformArray.forEach((eachPlatform) => {
+            eachPlatform.platformPos.left += 2 * eachPlatform.direction;
+            eachPlatform.platform.style.left = `${eachPlatform.platformPos.left}px`
+        })
     },
 
-    startInactivityTimer() {
-        this.inactivityTimer = setTimeout(() => {
-            this.showLoseModal() // Muestra el modal de "Perdiste" si no hay movimiento
-        }, this.inactivityLimit)
+    updateElements() {
+
+
+        this.platformArray.forEach((elm, idx) => {
+
+            const exceedsRight = elm.platformPos.left > this.gameSize.width
+            const exceedsLeft = elm.platformPos.left + elm.platformSize.width < 0
+
+            if (exceedsRight || exceedsLeft) {
+                elm.platform.remove()
+                // this.platformArray.splice(idx, 1)
+            }
+        })
+
+        this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
+
     },
 
-    resetInactivityTimer() {
-        clearTimeout(this.inactivityTimer); // Limpia el temporizador anterior
-        this.startInactivityTimer() // Inicia un nuevo temporizador
+    // startInactivityTimer() {
+    //     this.inactivityTimer = setTimeout(() => {
+    //         this.showLoseModal() // Muestra el modal de "Perdiste" si no hay movimiento
+    //     }, this.inactivityLimit)
+    // },
+
+    // resetInactivityTimer() {
+    //     clearTimeout(this.inactivityTimer); // Limpia el temporizador anterior
+    //     this.startInactivityTimer() // Inicia un nuevo temporizador
+    // },
+
+    gameOver() {
+        document.getElementById("lose-modal").style.display = "flex";
+        clearInterval(interval)
+
     },
 }

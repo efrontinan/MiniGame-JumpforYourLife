@@ -25,11 +25,13 @@ class Player {
     }
 
     init() {
-        // console.log(document.querySelectorAll('#eachFloor1'))
+
+        console.log()
         this.player = document.createElement('div')
 
         this.player.id = "player"
         this.player.style.backgroundColor = "green"
+         this.player.style.zIndex = "2"
         this.player.style.position = "absolute"
         this.player.style.width = `${this.playerSize.width}px`
         this.player.style.height = `${this.playerSize.height}px`
@@ -39,47 +41,64 @@ class Player {
         document.querySelector("#game-screen").appendChild(this.player)
 
         // Crear el marco de límite de salto
-        this.createMovementLimitFrame();
+        // this.createMovementLimitFrame();
     }
 
     createMovementLimitFrame() {
-        const movementLimitFrame = document.createElement('div');
-        movementLimitFrame.id = 'movement-limit-frame';
-        movementLimitFrame.style.position = 'absolute';
-        movementLimitFrame.style.left = `${(this.playerPos.left) - (this.distance + this.platformSize.width)}px`; // Límite izquierdo
-        movementLimitFrame.style.top = `${(this.playerPos.top) - (this.gameSize.height / 5) - 100}px`; // Límite superior
-        movementLimitFrame.style.width = `${(this.gameSize.width) - this.platformSize.width}px`; // Ancho igual al del juego
-        movementLimitFrame.style.height = `${this.gameSize.height}px`; // Alto igual al del juego
-        movementLimitFrame.style.border = '2px solid yellow'; // Color y grosor del marco
-        movementLimitFrame.style.boxSizing = 'border-box'; // Incluye el borde en el tamaño total
+        const movementLimitFrame = document.createElement('div')
+        movementLimitFrame.id = 'movement-limit-frame'
+        movementLimitFrame.style.position = 'absolute'
+        movementLimitFrame.style.left = `${(this.playerPos.left) - (this.distance + this.platformSize.width)}px`
+        movementLimitFrame.style.top = `${(this.playerPos.top) - (this.gameSize.height / 5) - 100}px`
+        movementLimitFrame.style.width = `${(this.gameSize.width) - this.platformSize.width}px`
+        movementLimitFrame.style.height = `${this.gameSize.height}px`
+        movementLimitFrame.style.border = '2px solid yellow'
+        movementLimitFrame.style.boxSizing = 'border-box'
 
         document.querySelector("#game-screen").appendChild(movementLimitFrame);
     }
 
     moveLeft() {
         this.playerPos.top -= this.gameSize.height / 5
-        // console.log(this.playerPos.left)
         this.playerPos.left -= (this.distance + this.platformSize.width)
-        // console.log(this.playerPos.left)
-        // this.game.collisionDetection()
     }
 
     moveUp() {
         this.playerPos.top -= this.gameSize.height / 5
-        // this.game.collisionDetection()
     }
 
     moveRight() {
         this.playerPos.top -= this.gameSize.height / 5
         this.playerPos.left += (this.distance + this.platformSize.width)
-        // this.game.collisionDetection()
     }
 
     resetPosition() {
-        this.playerPos = { left: 300, top: 625 }; // Define una posición inicial en el constructor
+        this.playerPos = { 
+            left: this.gameSize.width / 2 - this.playerSize.width,
+            top: this.gameSize.height - this.playerSize.height - 20 }
+    
         const playerElement = document.getElementById('player');
         playerElement.style.left = `${this.playerPos.left}px`;
         playerElement.style.top = `${this.playerPos.top}px`;
+    }
+
+    updatePosition (currentPlatform) {
+
+        let player_id = document.querySelector('#player');
+
+   
+
+        if (!(this.playerPos.top === this.gameSize.height - this.playerSize.height - 20)){
+
+            this.playerPos.left = currentPlatform.platformPos.left + (this.playerSize.width / 2)
+            player_id.style.left = `${this.playerPos.left}px`
+
+
+            this.playerPos.top = currentPlatform.platformPos.top + (this.playerSize.height / 2)
+            player_id.style.top = `${this.playerPos.top}px`
+
+
+        }
     }
 
 }
