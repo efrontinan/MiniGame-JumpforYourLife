@@ -38,6 +38,7 @@ const Game = {
         this.start()
         this.setDimensions()
         this.setEventListeners()
+        this.updateFloor(); // Inicia el movimiento de las plataformas
     },
 
     setEventListeners() {
@@ -75,58 +76,17 @@ const Game = {
     },
 
     createPlatforms() {
-        const floorPlatforms = []
         for (let i = 1; i < this.rowNumber; i++) {
-
             for (let j = 0; j < this.platformNumer; j++) {
-                const platform = new Platform(this.gameSize, i, this.platformSpecs, this.getRandomType(), j)
+                const platform = new Platform(this.gameSize, i, this.platformSpecs, this.getRandomType(), j);
 
+                // Asigna dirección basada en el grupo: derecha (1) o izquierda (-1)
+                const groupIndex = Math.floor((this.platformArray.length) / 3);
+                platform.direction = groupIndex % 2 === 0 ? 1 : -1;
 
-                this.platformArray.push(platform)
+                this.platformArray.push(platform);
             }
         }
-
-        // console.log (this.platformArray)
-        hasStablePlatform = false
-
-        //compruebo si en cada nivel hay un stable y si no, fijo uno como estable
-
-        for (let i = 1; i < this.rowNumber; i++) {
-
-            const rowArray = this.platformArray.filter(eachPlatform => {
-                return eachPlatform.rowNumber === i
-            })
-            if (rowArray.some(eachPlatform => eachPlatform.type === 'stable')) {
-
-                console.log('hay uno estable')
-                hasStablePlatform = true
-
-            } else {
-                hasStablePlatform = false
-
-                rowArray[0].type = 'stable';
-                rowArray[0].createPlatform();
-
-            }
-
-            if (rowArray.some(eachPlatform => eachPlatform.type === 'weak')) {
-
-                console.log('hay uno débil')
-                hasStablePlatform = true
-
-            } else {
-                hasStablePlatform = false
-
-                rowArray[1].type = 'weak';
-                rowArray[1].createPlatform();
-
-            }
-
-        }
-
-
-
-
     },
 
     getRandomType() {
@@ -142,16 +102,14 @@ const Game = {
     },
 
     collisionDetection() {
+        const playerPos = this.player.playerPos;
+        const playerSize = this.player.playerSize;
+        let isColliding = false;
 
-        const playerPos = this.player.playerPos
-        const playerSize = this.player.playerSize
+        this.platformArray.forEach(eachPlatform => {
+            const platformPos = eachPlatform.platformPos;
+            const platformSize = eachPlatform.platformSize;
 
-        this.platformArray.forEach(eachPlatforms => {
-            const platformPos = eachPlatforms.platformPos
-            const platformSize = eachPlatforms.platformSize
-            console.log('player left: ', playerPos.left)
-            console.log('each platform: ', platformPos.left)
-            console.log('final platform: ', (platformPos.left + platformSize.width))
             if (
                 (playerPos.left > platformPos.left &&
                     playerPos.left < (platformPos.left + platformSize.width) &&
@@ -163,30 +121,71 @@ const Game = {
                     ((playerPos.left + playerSize.width) > platformPos.left)) &&
                 (playerPos.top + playerSize.height) < (platformPos.top + platformSize.height) &&
                 (playerPos.top + playerSize.height) > (platformPos.top)
-                // No está chocando siempre y no se cuando lo recibe y cuando no
             ) {
-
-                this.onPlatform = true
-                this.updatePosition()
-                this.plaformNumber.push([eachPlatforms.rowNumber, eachPlatforms.index])
-                console.log(this.plaformNumber)
-                alert('Sos un crack')
-
-            } else {
-                //alert('NO DATA')
-                this.updatePosition()
+                isColliding = true;
+                this.onPlatform = true;
+                this.plaformNumber.push(eachPlatform.rowNumber, eachPlatform.index, platformPos.left, platformPos.top);
+                this.updatePosition();
             }
         });
+
+        // Si no hay colisión, muestra el modal de "Perdiste"
+        if (!isColliding) {
+            this.showLoseModal();
+        }
 
         return this.onPlatform;
     },
 
+    showLoseModal() {
+        document.getElementById("lose-modal").style.display = "flex";
+    },
+
+    resetGame() {
+        // Oculta el modal de "Perdiste"
+        document.getElementById("lose-modal").style.display = "none";
+
+        // Reinicia la posición del jugador
+        this.player.resetPosition(); // Asegúrate de definir `resetPosition` en tu clase Player para la posición inicial
+
+        // Limpia y vuelve a crear las plataformas
+        this.platformArray.forEach(platform => platform.platform.remove()); // Elimina del DOM
+        this.platformArray = []; // Vacía el array de plataformas
+        this.createPlatforms(); // Vuelve a crear las plataformas
+
+        // Reinicia otros elementos si es necesario (ej. contador de frames)
+        this.framesCounter = 0;
+    },
+
     updatePosition() {
         let player_id = document.querySelector('#player');
-        player_id.style.left = `${this.player.playerPos.left}px`
-        player_id.style.top = `${this.player.playerPos.top}px`
+
+        const leftIndex = this.plaformNumber.length - 2;
+        const topIndex = this.plaformNumber.length - 1;
+
+        // Actualiza las posiciones de acuerdo a estos índices
+        player_id.style.left = `${this.plaformNumber[leftIndex] + (this.player.playerSize.width / 2)}px`;
+        player_id.style.top = `${this.plaformNumber[topIndex] + (this.player.playerSize.height / 2)}px`;
     },
 
     updateFloor() {
-    },
+        setInterval(() => {
+            this.platformArray = this.platformArray.filter((platform) => {
+                // Mueve la plataforma según su dirección asignada
+                platform.platformPos.left += 2 * platform.direction;
+                platform.platform.style.left = `${platform.platformPos.left}px`;
+
+                // Verifica si la plataforma ha excedido los límites
+                const exceedsRight = platform.platformPos.left >= this.gameSize.width;
+                const exceedsLeft = platform.platformPos.left + platform.platformSize.width <= 0;
+
+                // Elimina la plataforma del array si excede los límites del juego
+                if (exceedsRight || exceedsLeft) {
+                    platform.platform.remove(); // Remueve del DOM
+                    return false; // Excluye del array
+                }
+                return true; // Mantiene en el array
+            });
+        }, 20); // Ejecuta cada 20ms para un movimiento fluido
+    }
 }

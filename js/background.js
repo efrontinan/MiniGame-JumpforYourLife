@@ -24,7 +24,7 @@ class Background {
     this.backgroundElement1 = document.createElement('div')
     //   this.backgroundElement2 = document.createElement('img')
 
-    this.backgroundElement1.style.backgroundColor = "green"
+    this.backgroundElement1.style.backgroundColor = "#00bdff"
     //   this.backgroundElement2.style.backgroundColor = "yellow"
 
     this.backgroundElement1.style.position = "absolute"

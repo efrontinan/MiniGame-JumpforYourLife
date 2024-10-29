@@ -39,11 +39,11 @@ class Platform {
 
     createPlatform() {
         if (this.type === 'stable') {
-            this.platform.style.backgroundColor = "white"
+            this.platform.style.backgroundColor = "#4caf50"
         }
 
         if (this.type === 'weak') {
-            this.platform.style.backgroundColor = "black"
+            this.platform.style.backgroundColor = "#4caf5080"
         }
 
         if (this.rowNumber % 2) {

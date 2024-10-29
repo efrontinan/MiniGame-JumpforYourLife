@@ -29,7 +29,7 @@ class Player {
         this.player = document.createElement('div')
 
         this.player.id = "player"
-        this.player.style.backgroundColor = "yellow"
+        this.player.style.backgroundColor = "green"
         this.player.style.position = "absolute"
         this.player.style.width = `${this.playerSize.width}px`
         this.player.style.height = `${this.playerSize.height}px`
@@ -57,6 +57,13 @@ class Player {
         this.playerPos.top -= this.gameSize.height / 5
         this.playerPos.left += (this.distance + this.platformSize.width)
         // this.game.collisionDetection()
+    }
+
+    resetPosition() {
+        this.playerPos = { left: 300, top: 625 }; // Define una posición inicial en el constructor
+        const playerElement = document.getElementById('player');
+        playerElement.style.left = `${this.playerPos.left}px`;
+        playerElement.style.top = `${this.playerPos.top}px`;
     }
 
 }

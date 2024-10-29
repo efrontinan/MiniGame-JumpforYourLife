@@ -12,6 +12,15 @@
 <body>
 
   <figure id="game-screen"></figure>
+  <div id="lose-modal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); color: white; text-align: center; justify-content: center; align-items: center;">
+    <div style="background-color: #333; padding: 20px; border-radius: 8px;">
+      <h2>Perdiste</h2>
+      <p>¡Inténtalo de nuevo!</p>
+      <button onclick="Game.resetGame()">Reiniciar</button>
+    </div>
+  </div>
+
 
   <script src="./js/platform.js"></script>
   <script src="./js/background.js"></script>
