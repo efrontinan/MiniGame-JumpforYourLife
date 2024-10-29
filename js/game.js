@@ -1,7 +1,7 @@
 const Game = {
 
-    inactivityTimer: null, 
-    inactivityLimit: 5000, 
+    inactivityTimer: null,
+    inactivityLimit: 5000,
 
     gameSize: {
         width: 700,
@@ -20,13 +20,15 @@ const Game = {
 
     rowNumber: 5,
     platformArray: [],
-    platformNumer: 3,
+    platformNumer: 5,
 
     platformSpecs: {
         distance: 150,
         width: 100,
         height: 100
     },
+
+    uniqueId: 0,
 
     isColliding: false,
     currentPlatform: [],
@@ -38,6 +40,8 @@ const Game = {
         MOVERIGHT: 'ArrowRight',
         MOVELEFT: 'ArrowLeft'
     },
+
+    framesGap: 100,
 
     init() {
         this.start()
@@ -87,21 +91,24 @@ const Game = {
 
     createPlatforms() {
 
-        let uniqueId = 0
-
         for (let i = 1; i < this.rowNumber; i++) {
 
             for (let j = 0; j < this.platformNumer; j++) {
 
-                const platform = new Platform(this.gameSize, i, this.platformSpecs, this.getRandomType(), j, uniqueId)
+                const platform = new Platform(this.gameSize, i, this.platformSpecs, this.getRandomType(), j, this.uniqueId)
                 this.platformArray.push(platform)
-
-                uniqueId++
+                // console.log(this.platformArray)
+                this.uniqueId++
 
             }
         }
 
-        hasStablePlatform = false
+        this.getStablePlatform()
+
+    },
+
+    getStablePlatform() {
+        let hasStablePlatform = false
 
         for (let i = 1; i < this.rowNumber; i++) {
             const rowArray = this.platformArray.filter(eachPlatform => {
@@ -183,17 +190,17 @@ const Game = {
         document.getElementById("lose-modal").style.display = "none"
 
         this.startGameLoop()
-        
+
         this.player.resetPosition()
-        
+
 
         this.platformArray.forEach(elm => {
             elm.platform.remove()
-        } )
+        })
         this.platformArray = []
         this.createPlatforms()
 
-        this.currentPlatform= []
+        this.currentPlatform = []
 
         this.framesCounter = 0
 
@@ -201,26 +208,20 @@ const Game = {
 
     },
 
-
-
     startGameLoop() {
-
         interval = setInterval(() => {
-
             this.movePlatforms()
-            this.updateElements()
-
-            // if(this.platformArray.length < 12){
-            //     this.createPlatforms()
-            // }
-
-
+            this.framesCounter++
+            console.log(this.framesCounter)
         }, 40)
-
     },
 
     movePlatforms() {
-        this.platformArray.forEach((eachPlatform) => {
+
+        this.platformArray.forEach((eachPlatform, idx) => {
+
+            if (this.framesCounter % this.framesGap === 0) eachPlatform.revertDirection()
+
             eachPlatform.platformPos.left += 2 * eachPlatform.direction;
             eachPlatform.platform.style.left = `${eachPlatform.platformPos.left}px`
         })
@@ -234,10 +235,10 @@ const Game = {
             const exceedsRight = elm.platformPos.left > this.gameSize.width
             const exceedsLeft = elm.platformPos.left + elm.platformSize.width < 0
 
-            if (exceedsRight || exceedsLeft) {
-                elm.platform.remove()
-                // this.platformArray.splice(idx, 1)
-            }
+            // if (exceedsRight || exceedsLeft) {
+            //     elm.platform.remove()
+            //     // this.platformArray.splice(idx, 1)
+            // }
         })
 
         this.player.updatePosition(this.platformArray[this.currentPlatform[0]])

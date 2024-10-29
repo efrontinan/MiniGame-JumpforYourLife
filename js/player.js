@@ -26,12 +26,11 @@ class Player {
 
     init() {
 
-        console.log()
         this.player = document.createElement('div')
 
         this.player.id = "player"
         this.player.style.backgroundColor = "green"
-         this.player.style.zIndex = "2"
+        this.player.style.zIndex = "2"
         this.player.style.position = "absolute"
         this.player.style.width = `${this.playerSize.width}px`
         this.player.style.height = `${this.playerSize.height}px`
@@ -73,22 +72,23 @@ class Player {
     }
 
     resetPosition() {
-        this.playerPos = { 
+        this.playerPos = {
             left: this.gameSize.width / 2 - this.playerSize.width,
-            top: this.gameSize.height - this.playerSize.height - 20 }
-    
+            top: this.gameSize.height - this.playerSize.height - 20
+        }
+
         const playerElement = document.getElementById('player');
         playerElement.style.left = `${this.playerPos.left}px`;
         playerElement.style.top = `${this.playerPos.top}px`;
     }
 
-    updatePosition (currentPlatform) {
+    updatePosition(currentPlatform) {
 
         let player_id = document.querySelector('#player');
 
-   
 
-        if (!(this.playerPos.top === this.gameSize.height - this.playerSize.height - 20)){
+
+        if (!(this.playerPos.top === this.gameSize.height - this.playerSize.height - 20)) {
 
             this.playerPos.left = currentPlatform.platformPos.left + (this.playerSize.width / 2)
             player_id.style.left = `${this.playerPos.left}px`

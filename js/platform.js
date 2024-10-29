@@ -23,8 +23,9 @@ class Platform {
             top: this.gameSize.height - ((this.gameSize.height / 5) * (this.rowNumber + 1))
         }
 
-        this.direction 
+        this.direction
 
+        this.initialLeft = (this.platformSize.width + this.distance) * -1
 
         this.init()
     }
@@ -34,6 +35,7 @@ class Platform {
         this.createPlatform()
         this.setDirection()
 
+        this.platform.classList = "platform"
         this.platform.style.border = "1px solid #000"
         this.platform.style.position = "absolute"
         this.platform.style.width = `${this.platformSize.width}px`
@@ -52,22 +54,19 @@ class Platform {
             this.platform.style.backgroundColor = "#4caf5080"
         }
 
-        if (this.rowNumber % 2) {
-            this.platformPos.left = (this.gameSize.width - this.platformSize.width - 20) - ((this.distance + this.platformSize.width) * this.index)
-            this.platform.style.left = `${this.platformPos.left}px`
-        } else {
-            this.platformPos.left = 20 + (this.distance + this.platformSize.width) * this.index
-            this.platform.style.left = `${this.platformPos.left}px`
-
-        }
+        this.platformPos.left = this.initialLeft + (this.distance + this.platformSize.width) * this.index
     }
 
     setDirection() {
-        if(this.rowNumber % 2 === 0){
-           this.direction= 1
+        if (this.rowNumber % 2 === 0) {
+            this.direction = 1
         } else {
-            this.direction= -1
+            this.direction = -1
         }
+    }
+
+    revertDirection() {
+        this.direction *= -1
     }
 
 }
