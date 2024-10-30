@@ -4,8 +4,8 @@ class Player {
         this.gameSize = gameSize
 
         this.playerSize = {
-            width: 50,
-            height: 50
+            width: 120,
+            height: 120
         }
 
         this.playerPos = {
@@ -85,11 +85,12 @@ class Player {
     updatePosition(currentPlatform) {
 
         if (!(this.playerPos.top === this.gameSize.height - this.playerSize.height - 20)) {
-            this.playerPos.left = currentPlatform.platformPos.left + (this.playerSize.width / 2)
+            this.playerPos.left = currentPlatform.platformPos.left + (this.platformSize.width - this.playerSize.width) / 2
             this.player.style.left = `${this.playerPos.left}px`
 
-            this.playerPos.top = currentPlatform.platformPos.top + (this.playerSize.height / 2)
+            this.playerPos.top = currentPlatform.platformPos.top + (this.platformSize.height - this.playerSize.height) / 2
             this.player.style.top = `${this.playerPos.top}px`
+
         }
     }
 }

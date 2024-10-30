@@ -139,8 +139,10 @@ const Game = {
             })
 
             for (let j = 0; j < this.platformNumer; j++) {
+
                 const platform = new Platform(this.gameSize, 4, this.platformSpecs, this.getRandomType(), j, this.uniqueId)
                 this.platformArray.push(platform)
+
                 this.uniqueId++
             }
 
@@ -158,22 +160,38 @@ const Game = {
                 return eachPlatform.rowNumber === i
             })
 
-            if (rowArray.some(eachPlatform => eachPlatform.type === 'stable')) {
-                hasStablePlatform = true
-            } else {
+            const stableArray = rowArray.filter(element => {
+                return element.type === 'stable'
+            })
+
+            console.log('antes: ', stableArray)
+
+            if (stableArray.length < 2) {
+
                 hasStablePlatform = false
-                rowArray[2].type = 'stable'
-                rowArray[2].createPlatform()
+
+                rowArray[1].type = 'stable'
+                rowArray[1].createPlatform()
+
+                rowArray[3].type = 'stable'
+                rowArray[3].createPlatform()
+
             }
 
-            if (rowArray.some(eachPlatform => eachPlatform.type === 'weak')) {
-                hasStablePlatform = true
-            } else {
-                hasStablePlatform = false
+            if (stableArray.length > 3) {
+
                 rowArray[2].type = 'weak'
                 rowArray[2].createPlatform()
+
+                rowArray[4].type = 'weak'
+                rowArray[4].createPlatform()
+
             }
+
+            console.log('despues', rowArray.filter(element => element.type === 'stable'))
+
         }
+
 
     },
 
@@ -219,7 +237,7 @@ const Game = {
                 this.alreadyCollision = true
 
                 if (eachPlatform.type === 'weak') {
-                this.gameOver()
+                    this.gameOver()
                 }
                 throw this.isColliding
 
@@ -288,6 +306,7 @@ const Game = {
             this.framesCounter++
             this.updateElements()
             this.printInfoJumps()
+            this.clearAll()
         }, 40)
 
     },
@@ -324,6 +343,21 @@ const Game = {
         if (exceedsRight || exceedsLeft) {
             this.gameOver()
         }
+
+    },
+
+    clearAll() {
+
+        // console.log('Array antes: ', this.platformArray)
+
+        this.platformArray.forEach((elem, idx) => {
+            if (elem.rowNumber === -1) {
+                elem.platform.remove()
+                this.platformArray.splice(idx, 1)
+            }
+        })
+
+        // console.log('Array despues: ', this.platformArray)
 
     },
 
