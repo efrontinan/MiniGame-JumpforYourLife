@@ -13,6 +13,7 @@ const Game = {
     },
 
     framesCounter: 0,
+    distanceCovered: 0,
 
     background: undefined,
 
@@ -30,7 +31,10 @@ const Game = {
 
     uniqueId: 0,
 
+    totalPoints: 0,
+
     isColliding: false,
+    alreadyCollision: false,
     currentPlatform: [],
 
     interval: '',
@@ -41,13 +45,13 @@ const Game = {
         MOVELEFT: 'ArrowLeft'
     },
 
-    framesGap: 100,
+    platform: undefined,
 
     init() {
         this.start()
         this.setDimensions()
         this.setEventListeners()
-    
+
         // this.updateFloor(); // Inicia el movimiento de las plataformas
         // this.startInactivityTimer();
     },
@@ -82,6 +86,7 @@ const Game = {
     start() {
         this.createElements()
         this.startGameLoop()
+        // alert('Los puntos maximos conseguidos son ' + localStorage.getItem('maxPoints'))
     },
 
     createElements() {
@@ -96,55 +101,37 @@ const Game = {
 
             for (let j = 0; j < this.platformNumer; j++) {
 
-                const platform = new Platform(this.gameSize, i, this.platformSpecs, this.getRandomType(), j, this.uniqueId)
-                this.platformArray.push(platform)
-                // console.log(this.platformArray)
+                this.platform = new Platform(this.gameSize, i, this.platformSpecs, this.getRandomType(), j, this.uniqueId)
+                this.platformArray.push(this.platform)
                 this.uniqueId++
 
             }
         }
 
-        this.getStablePlatform()
-        console.log(this.platformArray)
 
+        this.getStablePlatform()
     },
 
-    createNewPlatforms(){
+    createNewPlatforms() {
 
-      
+        if (this.isColliding === true && this.alreadyCollision === true) {
 
-        if (this.isColliding === true) {
-
-            
             this.platformArray.forEach((eachPlatform) => {
-
                 eachPlatform.rowNumber -= 1
-
                 eachPlatform.updateTopPosition(eachPlatform.rowNumber)
-
-                
             })
 
             // this.platformArray = this.platformArray.filter(eachPlatform => eachPlatform.rowNumber > 0)
-            
-            for (let j = 0; j < this.platformNumer; j++) {
 
+            for (let j = 0; j < this.platformNumer; j++) {
                 const platform = new Platform(this.gameSize, 4, this.platformSpecs, this.getRandomType(), j, this.uniqueId)
                 this.platformArray.push(platform)
                 this.uniqueId++
-
             }
 
-            this.isColliding === true
-            
-            console.log(this.platformArray)
-
-        
+            this.isColliding === false
         }
-
     },
-
-    
 
     getStablePlatform() {
         let hasStablePlatform = false
@@ -187,9 +174,8 @@ const Game = {
         const playerPos = this.player.playerPos;
         const playerSize = this.player.playerSize;
 
-
-
         this.platformArray.forEach((eachPlatform, idx) => {
+
             const platformPos = eachPlatform.platformPos;
             const platformSize = eachPlatform.platformSize;
 
@@ -198,17 +184,20 @@ const Game = {
                 playerPos.left + playerSize.width > platformPos.left &&
                 playerPos.top < platformPos.top + platformSize.height &&
                 playerPos.top + playerSize.height > platformPos.top
-
             ) {
+                this.totalPoints++
+                localStorage.setItem('maxPoints', this.totalPoints)
                 this.isColliding = true;
                 this.currentPlatform = [idx, eachPlatform.rowNumber, eachPlatform.index, platformPos.left, platformPos.top, eachPlatform.type];
-                this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
+                if (this.currentPlatform.length > 0) {
+                    this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
+                }
                 this.createNewPlatforms()
+                this.alreadyCollision = true;
 
                 if (eachPlatform.type === 'weak') {
                     this.gameOver()
                 }
-
                 throw this.isColliding
             } else {
                 this.isColliding = false;
@@ -216,11 +205,11 @@ const Game = {
         })
 
         if (!this.isColliding) {
-            this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
+            if (this.currentPlatform.length > 0) {
+                this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
+            }
             this.gameOver()
-
         }
-
         return this.onPlatform;
     },
 
@@ -233,16 +222,18 @@ const Game = {
 
         this.player.resetPosition()
 
-
         this.platformArray.forEach(elm => {
             elm.platform.remove()
         })
+
         this.platformArray = []
         this.createPlatforms()
 
         this.currentPlatform = []
 
         this.framesCounter = 0
+
+        this.alreadyCollision = false
 
         // this.resetInactivityTimer()
 
@@ -253,25 +244,32 @@ const Game = {
             this.movePlatforms()
             this.framesCounter++
             this.updateElements()
-            // console.log(this.framesCounter)
         }, 40)
     },
 
     movePlatforms() {
+        this.distanceCovered += 2
 
         this.platformArray.forEach((eachPlatform) => {
 
-            if (this.framesCounter % this.framesGap === 0) eachPlatform.revertDirection()
+            if (this.distanceCovered >= (-(eachPlatform.initialLeft) + (eachPlatform.distance / 2))) {
+                eachPlatform.revertDirection()
+            }
 
-            eachPlatform.platformPos.left += 2 * eachPlatform.direction;
+            eachPlatform.platformPos.left += 2 * eachPlatform.direction
             eachPlatform.platform.style.left = `${eachPlatform.platformPos.left}px`
         })
+
+        if (this.distanceCovered >= (-(this.platform.initialLeft) + (this.platform.distance / 2))) {
+            this.distanceCovered = 0
+        }
+
     },
 
     updateElements() {
 
         const exceedsRight = this.player.playerPos.left >= this.gameSize.width
-        const exceedsLeft = this.player.playerPos.left + this.player.platformSize.width/2  <= 0
+        const exceedsLeft = this.player.playerPos.left + this.player.platformSize.width / 2 <= 0
 
 
         // this.platformArray.forEach((elm, idx) => {
@@ -285,9 +283,11 @@ const Game = {
         //     // }
         // })
 
-        this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
+        if (this.currentPlatform.length > 0) {
+            this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
+        }
 
-        if( exceedsRight || exceedsLeft){
+        if (exceedsRight || exceedsLeft) {
             this.gameOver()
         }
 
@@ -307,6 +307,5 @@ const Game = {
     gameOver() {
         document.getElementById("lose-modal").style.display = "flex";
         clearInterval(interval)
-
     },
 }

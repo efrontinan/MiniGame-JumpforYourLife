@@ -77,28 +77,18 @@ class Player {
             top: this.gameSize.height - this.playerSize.height - 20
         }
 
-        const playerElement = document.getElementById('player');
-        playerElement.style.left = `${this.playerPos.left}px`;
-        playerElement.style.top = `${this.playerPos.top}px`;
+        this.player.style.left = `${this.playerPos.left}px`;
+        this.player.style.top = `${this.playerPos.top}px`;
     }
 
     updatePosition(currentPlatform) {
 
-        let player_id = document.querySelector('#player');
-
-
-
         if (!(this.playerPos.top === this.gameSize.height - this.playerSize.height - 20)) {
-
             this.playerPos.left = currentPlatform.platformPos.left + (this.playerSize.width / 2)
-            player_id.style.left = `${this.playerPos.left}px`
-
+            this.player.style.left = `${this.playerPos.left}px`
 
             this.playerPos.top = currentPlatform.platformPos.top + (this.playerSize.height / 2)
-            player_id.style.top = `${this.playerPos.top}px`
-
-
+            this.player.style.top = `${this.playerPos.top}px`
         }
     }
-
 }

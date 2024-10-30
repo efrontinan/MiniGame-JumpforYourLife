@@ -67,9 +67,10 @@ class Platform {
 
     revertDirection() {
         this.direction *= -1
+        // distanceCovered = 0
     }
 
-    updateTopPosition (updatedRowNumber) {
+    updateTopPosition(updatedRowNumber) {
 
         this.platformPos.top = this.gameSize.height - ((this.gameSize.height / 5) * (updatedRowNumber + 1))
         this.platform.style.top = `${this.platformPos.top}px`
