@@ -45,6 +45,7 @@ class Player {
 
     createMovementLimitFrame() {
         const movementLimitFrame = document.createElement('div')
+        
         movementLimitFrame.id = 'movement-limit-frame'
         movementLimitFrame.style.position = 'absolute'
         movementLimitFrame.style.left = `${(this.playerPos.left) - (this.distance + this.platformSize.width)}px`
