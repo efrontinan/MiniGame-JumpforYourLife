@@ -4,8 +4,8 @@ class Player {
         this.gameSize = gameSize
 
         this.playerSize = {
-            width: 120,
-            height: 120
+            width: 50,
+            height: 50
         }
 
         this.playerPos = {
