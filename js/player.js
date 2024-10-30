@@ -4,14 +4,14 @@ class Player {
         this.gameSize = gameSize
 
         this.playerSize = {
-            width: 50,
-            height: 50
+            width: 120,
+            height: 120
         }
 
         this.playerPos = {
             left: this.gameSize.width / 2 - this.playerSize.width,
-            top: this.gameSize.height - this.playerSize.height - 20,
-            base: this.gameSize.height - this.playerSize.height - 20
+            top: this.gameSize.height - this.playerSize.height - 5,
+            base: this.gameSize.height - this.playerSize.height - 5
         }
 
         this.distance = platformSpecs.distance
@@ -26,10 +26,10 @@ class Player {
 
     init() {
 
-        this.player = document.createElement('div')
+        this.player = document.createElement('img')
+        this.player.src = "./img/kimi-yip-evil-ghost-norm.gif"
 
         this.player.id = "player"
-        this.player.style.backgroundColor = "green"
         this.player.style.zIndex = "2"
         this.player.style.position = "absolute"
         this.player.style.width = `${this.playerSize.width}px`

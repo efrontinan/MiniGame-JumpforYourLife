@@ -31,6 +31,7 @@ class Platform {
     }
 
     init() {
+
         this.platform = document.createElement('div')
         this.createPlatform()
         this.setDirection()
@@ -43,9 +44,11 @@ class Platform {
         this.platform.style.top = `${this.platformPos.top}px`
 
         document.querySelector(`#game-screen`).appendChild(this.platform)
+
     }
 
     createPlatform() {
+
         if (this.type === 'stable') {
             this.platform.style.backgroundColor = "#4caf50"
         }
@@ -55,19 +58,23 @@ class Platform {
         }
 
         this.platformPos.left = this.initialLeft + (this.distance + this.platformSize.width) * this.index
+
     }
 
     setDirection() {
+
         if (this.rowNumber % 2 === 0) {
             this.direction = 1
         } else {
             this.direction = -1
         }
+
     }
 
     revertDirection() {
+
         this.direction *= -1
-        // distanceCovered = 0
+        
     }
 
     updateTopPosition(updatedRowNumber) {

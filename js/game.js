@@ -1,7 +1,10 @@
 const Game = {
 
-    inactivityTimer: null,
-    inactivityLimit: 5000,
+    name: 'Jump for your life',
+    author: 'Diego Silva y Elena Frontiñán',
+    version: '1.0',
+    license: undefined,
+
 
     gameSize: {
         width: 700,
@@ -13,15 +16,15 @@ const Game = {
     },
 
     framesCounter: 0,
-    distanceCovered: 0,
 
     background: undefined,
 
     player: undefined,
 
     rowNumber: 5,
-    platformArray: [],
     platformNumer: 5,
+    platformArray: [],
+    uniqueId: 0,
 
     platformSpecs: {
         distance: 150,
@@ -29,13 +32,11 @@ const Game = {
         height: 100
     },
 
-    uniqueId: 0,
-
-    totalPoints: 0,
-
     isColliding: false,
     alreadyCollision: false,
     currentPlatform: [],
+
+    totalPoints: 0,
 
     interval: '',
 
@@ -47,55 +48,61 @@ const Game = {
 
     platform: undefined,
 
-    init() {
+    init () {
+
         this.start()
         this.setDimensions()
         this.setEventListeners()
 
-        // this.updateFloor(); // Inicia el movimiento de las plataformas
-        // this.startInactivityTimer();
     },
 
-    setEventListeners() {
+    setEventListeners () {
+
         document.addEventListener("keydown", e => {
             switch (e.code) {
+
                 case this.keys.MOVEUP:
                     this.player.moveUp()
                     this.collisionDetection()
-                    // this.resetInactivityTimer() 
-                    break;
+                    break
+
                 case this.keys.MOVERIGHT:
                     this.player.moveRight()
                     this.collisionDetection()
-                    // this.resetInactivityTimer() 
-                    break;
+                    break
+
                 case this.keys.MOVELEFT:
                     this.player.moveLeft()
                     this.collisionDetection()
-                    // this.resetInactivityTimer() 
-                    break;
+                    break
             }
         })
     },
 
-    setDimensions() {
+    setDimensions () {
+
         document.querySelector("#game-screen").style.width = `${this.gameSize.width}px`
         document.querySelector("#game-screen").style.height = `${this.gameSize.height}px`
+
     },
 
-    start() {
+    start () {
+
         this.createElements()
         this.startGameLoop()
         // alert('Los puntos maximos conseguidos son ' + localStorage.getItem('maxPoints'))
+
     },
 
-    createElements() {
+    createElements () {
+
         this.createPlatforms()
         this.background = new Background(this.gameSize)
         this.player = new Player(this.gameSize, this.platformSpecs)
+
     },
 
-    createPlatforms() {
+    createPlatforms () {
 
         for (let i = 1; i < this.rowNumber; i++) {
 
@@ -108,11 +115,11 @@ const Game = {
             }
         }
 
-
         this.getStablePlatform()
+
     },
 
-    createNewPlatforms() {
+    createNewPlatforms () {
 
         if (this.isColliding === true && this.alreadyCollision === true) {
 
@@ -120,8 +127,6 @@ const Game = {
                 eachPlatform.rowNumber -= 1
                 eachPlatform.updateTopPosition(eachPlatform.rowNumber)
             })
-
-            // this.platformArray = this.platformArray.filter(eachPlatform => eachPlatform.rowNumber > 0)
 
             for (let j = 0; j < this.platformNumer; j++) {
                 const platform = new Platform(this.gameSize, 4, this.platformSpecs, this.getRandomType(), j, this.uniqueId)
@@ -133,51 +138,58 @@ const Game = {
         }
     },
 
-    getStablePlatform() {
+    getStablePlatform () {
+
         let hasStablePlatform = false
 
         for (let i = 1; i < this.rowNumber; i++) {
+
             const rowArray = this.platformArray.filter(eachPlatform => {
                 return eachPlatform.rowNumber === i
             })
+
             if (rowArray.some(eachPlatform => eachPlatform.type === 'stable')) {
                 hasStablePlatform = true
             } else {
                 hasStablePlatform = false
-                rowArray[2].type = 'stable';
-                rowArray[2].createPlatform();
+                rowArray[2].type = 'stable'
+                rowArray[2].createPlatform()
             }
+
             if (rowArray.some(eachPlatform => eachPlatform.type === 'weak')) {
                 hasStablePlatform = true
             } else {
                 hasStablePlatform = false
-                rowArray[2].type = 'weak';
-                rowArray[2].createPlatform();
+                rowArray[2].type = 'weak'
+                rowArray[2].createPlatform()
             }
         }
+
     },
 
-    getRandomType() {
+    getRandomType () {
 
         let randomNumber = Math.random()
 
         if (randomNumber >= .3) {
             return 'stable'
         }
+
         if (randomNumber < .3) {
             return 'weak'
         }
+
     },
 
-    collisionDetection() {
+    collisionDetection () {
 
-        const playerPos = this.player.playerPos;
-        const playerSize = this.player.playerSize;
+        const playerPos = this.player.playerPos
+        const playerSize = this.player.playerSize
 
         this.platformArray.forEach((eachPlatform, idx) => {
 
-            const platformPos = eachPlatform.platformPos;
-            const platformSize = eachPlatform.platformSize;
+            const platformPos = eachPlatform.platformPos
+            const platformSize = eachPlatform.platformSize
 
             if (
                 playerPos.left < platformPos.left + platformSize.width &&
@@ -185,37 +197,43 @@ const Game = {
                 playerPos.top < platformPos.top + platformSize.height &&
                 playerPos.top + playerSize.height > platformPos.top
             ) {
+
                 this.totalPoints++
                 localStorage.setItem('maxPoints', this.totalPoints)
-                this.isColliding = true;
-                this.currentPlatform = [idx, eachPlatform.rowNumber, eachPlatform.index, platformPos.left, platformPos.top, eachPlatform.type];
+                this.isColliding = true
+                this.currentPlatform = [idx, eachPlatform.rowNumber, eachPlatform.index, platformPos.left, platformPos.top, eachPlatform.type]
+
                 if (this.currentPlatform.length > 0) {
                     this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
                 }
                 this.createNewPlatforms()
-                this.alreadyCollision = true;
+                this.alreadyCollision = true
 
                 if (eachPlatform.type === 'weak') {
                     this.gameOver()
                 }
                 throw this.isColliding
+
             } else {
-                this.isColliding = false;
+                this.isColliding = false
             }
+
         })
 
         if (!this.isColliding) {
+
             if (this.currentPlatform.length > 0) {
                 this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
             }
             this.gameOver()
         }
-        return this.onPlatform;
+
+        return this.onPlatform
+
     },
 
+    resetGame () {
 
-
-    resetGame() {
         document.getElementById("lose-modal").style.display = "none"
 
         this.startGameLoop()
@@ -227,6 +245,7 @@ const Game = {
         })
 
         this.platformArray = []
+
         this.createPlatforms()
 
         this.currentPlatform = []
@@ -235,24 +254,25 @@ const Game = {
 
         this.alreadyCollision = false
 
-        // this.resetInactivityTimer()
-
     },
 
-    startGameLoop() {
+    startGameLoop () {
+
         interval = setInterval(() => {
             this.movePlatforms()
             this.framesCounter++
             this.updateElements()
         }, 40)
+
     },
 
     movePlatforms() {
-        this.distanceCovered += 2
+
+        this.framesCounter += 2
 
         this.platformArray.forEach((eachPlatform) => {
 
-            if (this.distanceCovered >= (-(eachPlatform.initialLeft) + (eachPlatform.distance / 2))) {
+            if (this.framesCounter >= (-(eachPlatform.initialLeft) + (eachPlatform.distance / 2))) {
                 eachPlatform.revertDirection()
             }
 
@@ -260,8 +280,8 @@ const Game = {
             eachPlatform.platform.style.left = `${eachPlatform.platformPos.left}px`
         })
 
-        if (this.distanceCovered >= (-(this.platform.initialLeft) + (this.platform.distance / 2))) {
-            this.distanceCovered = 0
+        if (this.framesCounter >= (-(this.platform.initialLeft) + (this.platform.distance / 2))) {
+            this.framesCounter = 0
         }
 
     },
@@ -270,18 +290,6 @@ const Game = {
 
         const exceedsRight = this.player.playerPos.left >= this.gameSize.width
         const exceedsLeft = this.player.playerPos.left + this.player.platformSize.width / 2 <= 0
-
-
-        // this.platformArray.forEach((elm, idx) => {
-
-        //     const exceedsRight = elm.platformPos.left > this.gameSize.width
-        //     const exceedsLeft = elm.platformPos.left + elm.platformSize.width < 0
-
-        //     // if (exceedsRight || exceedsLeft) {
-        //     //     elm.platform.remove()
-        //     //     // this.platformArray.splice(idx, 1)
-        //     // }
-        // })
 
         if (this.currentPlatform.length > 0) {
             this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
@@ -293,19 +301,11 @@ const Game = {
 
     },
 
-    // startInactivityTimer() {
-    //     this.inactivityTimer = setTimeout(() => {
-    //         this.showLoseModal() // Muestra el modal de "Perdiste" si no hay movimiento
-    //     }, this.inactivityLimit)
-    // },
-
-    // resetInactivityTimer() {
-    //     clearTimeout(this.inactivityTimer); // Limpia el temporizador anterior
-    //     this.startInactivityTimer() // Inicia un nuevo temporizador
-    // },
-
     gameOver() {
-        document.getElementById("lose-modal").style.display = "flex";
+
+        document.getElementById("lose-modal").style.display = "flex"
         clearInterval(interval)
+
     },
+
 }
