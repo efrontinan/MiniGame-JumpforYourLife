@@ -48,15 +48,16 @@ const Game = {
 
     platform: undefined,
 
-    init () {
+    init() {
 
         this.start()
         this.setDimensions()
         this.setEventListeners()
+        this.printInfoJumps()
 
     },
 
-    setEventListeners () {
+    setEventListeners() {
 
         document.addEventListener("keydown", e => {
             switch (e.code) {
@@ -64,7 +65,7 @@ const Game = {
                 case this.keys.MOVEUP:
                     this.player.moveUp()
                     this.background.moveBackground()
-                    this.background.updateBackground ()
+                    this.background.updateBackground()
                     this.collisionDetection()
                     break
 
@@ -81,14 +82,21 @@ const Game = {
         })
     },
 
-    setDimensions () {
+    setDimensions() {
 
         document.querySelector("#game-screen").style.width = `${this.gameSize.width}px`
         document.querySelector("#game-screen").style.height = `${this.gameSize.height}px`
 
     },
 
-    start () {
+    printInfoJumps() {
+
+        document.getElementById("jump-max-number").innerHTML = localStorage.getItem('maxPoints');
+        document.getElementById("jump-number").innerHTML = this.totalPoints;
+
+    },
+
+    start() {
 
         this.createElements()
         this.startGameLoop()
@@ -96,7 +104,7 @@ const Game = {
 
     },
 
-    createElements () {
+    createElements() {
 
         this.createPlatforms()
         this.background = new Background(this.gameSize)
@@ -104,7 +112,7 @@ const Game = {
 
     },
 
-    createPlatforms () {
+    createPlatforms() {
 
         for (let i = 1; i < this.rowNumber; i++) {
 
@@ -121,7 +129,7 @@ const Game = {
 
     },
 
-    createNewPlatforms () {
+    createNewPlatforms() {
 
         if (this.isColliding === true && this.alreadyCollision === true) {
 
@@ -140,7 +148,7 @@ const Game = {
         }
     },
 
-    getStablePlatform () {
+    getStablePlatform() {
 
         let hasStablePlatform = false
 
@@ -169,7 +177,7 @@ const Game = {
 
     },
 
-    getRandomType () {
+    getRandomType() {
 
         let randomNumber = Math.random()
 
@@ -183,7 +191,7 @@ const Game = {
 
     },
 
-    collisionDetection () {
+    collisionDetection() {
 
         const playerPos = this.player.playerPos
         const playerSize = this.player.playerSize
@@ -201,7 +209,6 @@ const Game = {
             ) {
 
                 this.totalPoints++
-                localStorage.setItem('maxPoints', this.totalPoints)
                 this.isColliding = true
                 this.currentPlatform = [idx, eachPlatform.rowNumber, eachPlatform.index, platformPos.left, platformPos.top, eachPlatform.type]
 
@@ -234,7 +241,17 @@ const Game = {
 
     },
 
-    resetGame () {
+    updateLocalStorage() {
+
+        if (localStorage.getItem('maxPoints') < this.totalPoints) {
+
+            localStorage.setItem('maxPoints', this.totalPoints)
+
+        }
+
+    },
+
+    resetGame() {
 
         document.getElementById("lose-modal").style.display = "none"
 
@@ -256,14 +273,21 @@ const Game = {
 
         this.alreadyCollision = false
 
+        this.totalPoints = 0
+
+        this.updateLocalStorage()
+
+        this.printInfoJumps()
+
     },
 
-    startGameLoop () {
+    startGameLoop() {
 
         interval = setInterval(() => {
             this.movePlatforms()
             this.framesCounter++
             this.updateElements()
+            this.printInfoJumps()
         }, 40)
 
     },
