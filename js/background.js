@@ -3,21 +3,8 @@ class Background {
 
     this.backgroundSize = {
       width: gameSize.width,
-      height: gameSize.height
-    }
-
-    this.backgroundPosition1 = {
-      left: 0,
-      top: 0
-    }
-
-    this.backgroundPosition2 = {
-      left: 0,
-      top: 0
-    }
-
-    this.backgroundVel = {
-      left: 10
+      height: undefined,
+      originalHeight: gameSize.height
     }
 
     this.init()
@@ -26,33 +13,73 @@ class Background {
 
   init() {
 
-    this.backgroundElement1 = document.createElement('div')
-    this.backgroundElement1.style.backgroundImage = "url('img/background 2.jpg')"
+    this.background1 = document.createElement('img')
+    this.background1.src = "./img/background 2.jpg"
+    this.background1.classList = "background1"
 
-    this.backgroundElement1.style.backgroundColor = "#00bdff"
-    this.backgroundElement1.style.position = "absolute"
-    this.backgroundElement1.style.zIndex = "-1"
-    this.backgroundElement1.style.width = `${this.backgroundSize.width}px`
-    this.backgroundElement1.style.height = `${this.backgroundSize.height}px`
-    this.backgroundElement1.style.left = `${this.backgroundPosition1.left}px`
-    this.backgroundElement1.style.top = `${this.backgroundPosition1.top}px`
+    this.background2 = document.createElement('img')
+    this.background2.src = "./img/background 2.jpg"
+    this.background2.classList = "background2"
 
-    // this.backgroundElement2 = document.createElement('div')
-    // this.backgroundElement2.style.backgroundImage = "url('img/background 2.jpg')"
+    document.querySelector("#game-screen").appendChild(this.background1)
+    document.querySelector("#game-screen").appendChild(this.background2)
 
-    // this.backgroundElement2.style.backgroundColor = "#00bdff"
-    // this.backgroundElement2.style.position = "absolute"
-    // this.backgroundElement2.style.backgroundSize = "cover"
-    // this.backgroundElement2.style.backgroundRepeat = "no-repeat"
-    // this.backgroundElement2.style.backgroundPosition = "center"
-    // this.backgroundElement2.style.zIndex = "-1"
-    // this.backgroundElement2.style.width = `${this.backgroundSize.width}px`
-    // this.backgroundElement2.style.height = `${this.backgroundSize.height}px`
-    // this.backgroundElement2.style.left = `${this.backgroundPosition1.left}px`
-    // this.backgroundElement2.style.top = `${this.backgroundPosition1.top}px`
+    this.background1.onload = () => {
 
-    document.querySelector("#game-screen").appendChild(this.backgroundElement1)
-    
+      this.background1.style.position = "absolute"
+      this.background1.style.zIndex = "-1"
+      this.background1.style.width = `${this.backgroundSize.width}px`
+
+      this.backgroundSize.height = this.background1.offsetHeight
+
+      this.backgroundPosition1 = {
+        left: 0,
+        top: this.backgroundSize.originalHeight - this.backgroundSize.height
+      }
+
+      this.background1.style.height = `${this.backgroundSize.height}px`
+      this.background1.style.left = `${this.backgroundPosition1.left}px`
+      this.background1.style.top = `${this.backgroundPosition1.top}px`
+
+      this.backgroundPosition2 = {
+        left: 0,
+        top: this.backgroundPosition1.top - this.backgroundSize.height
+      }
+
+      this.background2.style.position = "absolute"
+      this.background2.style.zIndex = "-1"
+      this.background2.style.width = `${this.backgroundSize.width}px`
+      this.background2.style.height = `${this.backgroundSize.height}px`
+      this.background2.style.height = `${this.backgroundSize.height}px`
+      this.background2.style.left = `${this.backgroundPosition1.left}px`
+      this.background2.style.top = `${this.backgroundPosition1.top}px`
+      
+    }
+
+  }
+
+
+  moveBackground() {
+
+    if(this.backgroundPosition1.top >= this.backgroundSize.originalHeight){
+
+      this.backgroundPosition1.top = this.backgroundSize.originalHeight - this.backgroundSize.height
+      this.backgroundPosition2.top = this.backgroundPosition1.top - this.backgroundSize.height
+
+      console.log(this.backgroundPosition2.left)
+
+    }
+
+    this.backgroundPosition1.top += this.backgroundSize.height / 5
+    this.backgroundPosition2.top += this.backgroundSize.height / 5
+
+  }
+
+  updateBackground() {
+
+    this.background1.style.top = `${this.backgroundPosition1.top}px`
+    this.background2.style.top = `${this.backgroundPosition2.top}px`
+
   }
 
 }
