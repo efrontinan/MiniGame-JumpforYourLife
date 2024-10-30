@@ -10,13 +10,47 @@
 </head>
 
 <body>
+  <section class="container">
 
-  <figure id="game-screen"></figure>
+    <figure id="game-screen"></figure>
+
+    <div class="details-content">
+
+      <header>
+        <h1>¡Bienvenido Jugador!</h1>
+      </header>
+
+      <div class="jun-content">
+        <div id="jump-max">
+          <h3>Saltos Máximos</h3>
+          <div class="jump-display">
+            <span id="jump-max-number">0</span>
+          </div>
+        </div>
+
+        <div id="jump-count">
+          <h3>Saltos Actuales</h3>
+          <div class="jump-display">
+            <span id="jump-number">0</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="instructions">
+        <div class="card">
+          <h2>Instrucciones</h2>
+          <hr>
+          <p>Usa las flechas para mover a Froggy y saltar. ¡Evita los obstáculos y llega lo más lejos que puedas!</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <div id="lose-modal">
     <div>
       <h2>Perdiste</h2>
-      <p>¡Inténtalo de nuevo!</p>
-      <button onclick="Game.resetGame()">Reiniciar</button>
+      <button class="button" onclick="Game.resetGame()">¡Jugar Nuevamente!</button>
     </div>
   </div>
 

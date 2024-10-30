@@ -4,8 +4,8 @@ class Player {
         this.gameSize = gameSize
 
         this.playerSize = {
-            width: 120,
-            height: 120
+            width: 50,
+            height: 50
         }
 
         this.playerPos = {
@@ -45,7 +45,7 @@ class Player {
 
     createMovementLimitFrame() {
         const movementLimitFrame = document.createElement('div')
-        
+
         movementLimitFrame.id = 'movement-limit-frame'
         movementLimitFrame.style.position = 'absolute'
         movementLimitFrame.style.left = `${(this.playerPos.left) - (this.distance + this.platformSize.width)}px`

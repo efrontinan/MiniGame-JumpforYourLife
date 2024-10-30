@@ -37,7 +37,6 @@ class Platform {
         this.setDirection()
 
         this.platform.classList = "platform"
-        this.platform.style.border = "1px solid #000"
         this.platform.style.position = "absolute"
         this.platform.style.width = `${this.platformSize.width}px`
         this.platform.style.height = `${this.platformSize.height}px`
@@ -50,11 +49,17 @@ class Platform {
     createPlatform() {
 
         if (this.type === 'stable') {
-            this.platform.style.backgroundColor = "#4caf50"
+            this.platform.style.backgroundImage = "url('img/stable.png')"
+            this.platform.style.backgroundSize = "cover";
+            this.platform.style.backgroundRepeat = "no-repeat";
+            this.platform.style.backgroundPosition = "center";
         }
 
         if (this.type === 'weak') {
-            this.platform.style.backgroundColor = "#4caf5080"
+            this.platform.style.backgroundImage = "url('img/weak.png')"
+            this.platform.style.backgroundSize = "cover";
+            this.platform.style.backgroundRepeat = "no-repeat";
+            this.platform.style.backgroundPosition = "center";
         }
 
         this.platformPos.left = this.initialLeft + (this.distance + this.platformSize.width) * this.index
@@ -74,7 +79,7 @@ class Platform {
     revertDirection() {
 
         this.direction *= -1
-        
+
     }
 
     updateTopPosition(updatedRowNumber) {
