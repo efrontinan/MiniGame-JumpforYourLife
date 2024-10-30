@@ -219,7 +219,7 @@ const Game = {
                 this.alreadyCollision = true
 
                 if (eachPlatform.type === 'weak') {
-                    // this.gameOver()
+                this.gameOver()
                 }
                 throw this.isColliding
 
@@ -234,7 +234,7 @@ const Game = {
             if (this.currentPlatform.length > 0) {
                 this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
             }
-            // this.gameOver()
+            this.gameOver()
         }
 
         return this.onPlatform
