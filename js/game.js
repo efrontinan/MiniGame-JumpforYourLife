@@ -47,6 +47,7 @@ const Game = {
         this.start()
         this.setDimensions()
         this.setEventListeners()
+    
         // this.updateFloor(); // Inicia el movimiento de las plataformas
         // this.startInactivityTimer();
     },
@@ -104,8 +105,46 @@ const Game = {
         }
 
         this.getStablePlatform()
+        console.log(this.platformArray)
 
     },
+
+    createNewPlatforms(){
+
+      
+
+        if (this.isColliding === true) {
+
+            
+            this.platformArray.forEach((eachPlatform) => {
+
+                eachPlatform.rowNumber -= 1
+
+                eachPlatform.updateTopPosition(eachPlatform.rowNumber)
+
+                
+            })
+
+            // this.platformArray = this.platformArray.filter(eachPlatform => eachPlatform.rowNumber > 0)
+            
+            for (let j = 0; j < this.platformNumer; j++) {
+
+                const platform = new Platform(this.gameSize, 4, this.platformSpecs, this.getRandomType(), j, this.uniqueId)
+                this.platformArray.push(platform)
+                this.uniqueId++
+
+            }
+
+            this.isColliding === true
+            
+            console.log(this.platformArray)
+
+        
+        }
+
+    },
+
+    
 
     getStablePlatform() {
         let hasStablePlatform = false
@@ -118,15 +157,15 @@ const Game = {
                 hasStablePlatform = true
             } else {
                 hasStablePlatform = false
-                rowArray[0].type = 'stable';
-                rowArray[0].createPlatform();
+                rowArray[2].type = 'stable';
+                rowArray[2].createPlatform();
             }
             if (rowArray.some(eachPlatform => eachPlatform.type === 'weak')) {
                 hasStablePlatform = true
             } else {
                 hasStablePlatform = false
-                rowArray[1].type = 'weak';
-                rowArray[1].createPlatform();
+                rowArray[2].type = 'weak';
+                rowArray[2].createPlatform();
             }
         }
     },
@@ -135,10 +174,10 @@ const Game = {
 
         let randomNumber = Math.random()
 
-        if (randomNumber >= .5) {
+        if (randomNumber >= .3) {
             return 'stable'
         }
-        if (randomNumber < .5) {
+        if (randomNumber < .3) {
             return 'weak'
         }
     },
@@ -164,6 +203,7 @@ const Game = {
                 this.isColliding = true;
                 this.currentPlatform = [idx, eachPlatform.rowNumber, eachPlatform.index, platformPos.left, platformPos.top, eachPlatform.type];
                 this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
+                this.createNewPlatforms()
 
                 if (eachPlatform.type === 'weak') {
                     this.gameOver()
@@ -212,13 +252,14 @@ const Game = {
         interval = setInterval(() => {
             this.movePlatforms()
             this.framesCounter++
-            console.log(this.framesCounter)
+            this.updateElements()
+            // console.log(this.framesCounter)
         }, 40)
     },
 
     movePlatforms() {
 
-        this.platformArray.forEach((eachPlatform, idx) => {
+        this.platformArray.forEach((eachPlatform) => {
 
             if (this.framesCounter % this.framesGap === 0) eachPlatform.revertDirection()
 
@@ -229,19 +270,26 @@ const Game = {
 
     updateElements() {
 
+        const exceedsRight = this.player.playerPos.left >= this.gameSize.width
+        const exceedsLeft = this.player.playerPos.left + this.player.platformSize.width/2  <= 0
 
-        this.platformArray.forEach((elm, idx) => {
 
-            const exceedsRight = elm.platformPos.left > this.gameSize.width
-            const exceedsLeft = elm.platformPos.left + elm.platformSize.width < 0
+        // this.platformArray.forEach((elm, idx) => {
 
-            // if (exceedsRight || exceedsLeft) {
-            //     elm.platform.remove()
-            //     // this.platformArray.splice(idx, 1)
-            // }
-        })
+        //     const exceedsRight = elm.platformPos.left > this.gameSize.width
+        //     const exceedsLeft = elm.platformPos.left + elm.platformSize.width < 0
+
+        //     // if (exceedsRight || exceedsLeft) {
+        //     //     elm.platform.remove()
+        //     //     // this.platformArray.splice(idx, 1)
+        //     // }
+        // })
 
         this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
+
+        if( exceedsRight || exceedsLeft){
+            this.gameOver()
+        }
 
     },
 
