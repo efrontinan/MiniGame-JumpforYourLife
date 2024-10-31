@@ -21,8 +21,11 @@ const Game = {
 
     player: undefined,
 
-    rowNumber: 5,
-    platformNumer: 5,
+    visibleRowNumber: 5,
+    visiblePlatformNumer: 7,
+
+    currentRowNumber: 1,
+
     platformArray: [],
     uniqueId: 0,
 
@@ -50,15 +53,17 @@ const Game = {
 
     init() {
 
-        this.start()
         this.setDimensions()
         this.setEventListeners()
         this.printInfoJumps()
 
     },
 
-    startGame() {
 
+    start() {
+
+        this.createElements()
+        this.startGameLoop()
         document.getElementById('start-modal').style.display = 'none'
 
     },
@@ -102,13 +107,6 @@ const Game = {
 
     },
 
-    start() {
-
-        this.createElements()
-        this.startGameLoop()
-
-    },
-
     createElements() {
 
         this.createPlatforms()
@@ -119,9 +117,9 @@ const Game = {
 
     createPlatforms() {
 
-        for (let i = 1; i < this.rowNumber; i++) {
+        for (let i = 1; i < this.visibleRowNumber; i++) {
 
-            for (let j = 0; j < this.platformNumer; j++) {
+            for (let j = 0; j < this.visiblePlatformNumer; j++) {
 
                 this.platform = new Platform(this.gameSize, i, this.platformSpecs, this.getRandomType(), j, this.uniqueId)
                 this.platformArray.push(this.platform)
@@ -129,6 +127,8 @@ const Game = {
 
             }
         }
+
+        this.currentRowNumber++
 
         this.getStablePlatform()
 
@@ -139,15 +139,18 @@ const Game = {
         if (this.isColliding === true && this.alreadyCollision === true) {
 
             this.platformArray.forEach((eachPlatform) => {
+
                 eachPlatform.rowNumber -= 1
                 eachPlatform.updateTopPosition(eachPlatform.rowNumber)
+
             })
 
-            for (let j = 0; j < this.platformNumer; j++) {
+            for (let j = 0; j < this.visiblePlatformNumer; j++) {
 
-                const platform = new Platform(this.gameSize, 4, this.platformSpecs, this.getRandomType(), j, this.uniqueId)
+                const platform = new Platform(this.gameSize, this.currentRowNumber, this.platformSpecs, this.getRandomType(), j, this.uniqueId)
                 this.platformArray.push(platform)
 
+                this.currentRowNumber++
                 this.uniqueId++
             }
 
@@ -159,7 +162,7 @@ const Game = {
 
         let hasStablePlatform = false
 
-        for (let i = 1; i < this.rowNumber; i++) {
+        for (let i = 1; i < this.visibleRowNumber; i++) {
 
             const rowArray = this.platformArray.filter(eachPlatform => {
                 return eachPlatform.rowNumber === i
@@ -168,8 +171,6 @@ const Game = {
             const stableArray = rowArray.filter(element => {
                 return element.type === 'stable'
             })
-
-            console.log('antes: ', stableArray)
 
             if (stableArray.length < 2) {
 
@@ -192,8 +193,6 @@ const Game = {
                 rowArray[4].createPlatform()
 
             }
-
-            console.log('despues', rowArray.filter(element => element.type === 'stable'))
 
         }
 
@@ -233,18 +232,29 @@ const Game = {
 
                 this.totalPoints++
                 this.isColliding = true
-                this.currentPlatform = [idx, eachPlatform.rowNumber, eachPlatform.index, platformPos.left, platformPos.top, eachPlatform.type]
+
+                //Note: delete idx from currentPlatform
+
+                this.currentPlatform = [idx, eachPlatform.uniqueId, eachPlatform.visibleRowNumber, eachPlatform.index, platformPos.left, platformPos.top, eachPlatform.type]
 
                 if (this.currentPlatform.length > 0) {
-                    this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
+                    this.player.updatePosition(this.platformArray.filter(elm => {
+                        return elm.uniqueId === this.currentPlatform[1]
+                    }))
                 }
+
                 this.createNewPlatforms()
-                this.alreadyCollision = true
 
                 if (eachPlatform.type === 'weak') {
                     this.totalPoints--
                     this.gameOver('Fuiste consumido, ¡Intentalo nuevamente!')
                 }
+
+                //No está detectando bien el already Collision
+                this.alreadyCollision = true
+
+                this.currentRowNumber ++
+
                 throw this.isColliding
 
             } else {
@@ -256,9 +266,13 @@ const Game = {
         if (!this.isColliding) {
 
             if (this.currentPlatform.length > 0) {
-                this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
+                this.player.updatePosition(this.platformArray.filter(elm => {
+                    return elm.uniqueId === this.currentPlatform[1]
+                }))
             }
+
             this.gameOver('Caíste en espacio vacio, ¡Intentalo nuevamente!')
+
         }
 
         return this.onPlatform
@@ -288,16 +302,15 @@ const Game = {
         })
 
         this.platformArray = []
+        this.currentPlatform = []
+
+        this.currentRowNumber = 0
+        this.alreadyCollision = false
 
         this.createPlatforms()
 
-        this.currentPlatform = []
-
-        this.framesCounter = 0
-
-        this.alreadyCollision = false
-
         this.totalPoints = 0
+        this.framesCounter = 0
 
         this.updateLocalStorage()
 
@@ -307,13 +320,13 @@ const Game = {
 
     startGameLoop() {
 
-        interval = setInterval(() => {
+        this.interval = setInterval(() => {
             this.movePlatforms()
             this.framesCounter++
             this.updateElements()
             this.printInfoJumps()
             this.clearAll()
-        }, 40)
+        }, 20)
 
     },
 
@@ -323,7 +336,7 @@ const Game = {
 
         this.platformArray.forEach((eachPlatform) => {
 
-            if (this.framesCounter >= (-(eachPlatform.initialLeft) + (eachPlatform.distance / 2))) {
+            if (this.framesCounter >= 3*(-(eachPlatform.initialLeft) + (eachPlatform.distance / 2))) {
                 eachPlatform.revertDirection()
             }
 
@@ -331,7 +344,7 @@ const Game = {
             eachPlatform.platform.style.left = `${eachPlatform.platformPos.left}px`
         })
 
-        if (this.framesCounter >= (-(this.platform.initialLeft) + (this.platform.distance / 2))) {
+        if (this.framesCounter >= 3*(-(this.platform.initialLeft) + (this.platform.distance / 2))) {
             this.framesCounter = 0
         }
 
@@ -343,7 +356,11 @@ const Game = {
         const exceedsLeft = this.player.playerPos.left + this.player.platformSize.width / 2 <= 0
 
         if (this.currentPlatform.length > 0) {
-            this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
+            
+            this.player.updatePosition(this.platformArray.filter(elm => {
+                return elm.uniqueId === this.currentPlatform[1]
+            }))
+            
         }
 
         if (exceedsRight || exceedsLeft) {
@@ -355,7 +372,7 @@ const Game = {
     clearAll() {
 
         this.platformArray.forEach((elem, idx) => {
-            if (elem.rowNumber === -1) {
+            if (elem.visibleRowNumber === -1) {
                 elem.platform.remove()
                 this.platformArray.splice(idx, 1)
             }
@@ -369,7 +386,7 @@ const Game = {
         document.getElementById("jump-number-lose").innerHTML = this.totalPoints
         document.getElementById("loss-reason").innerHTML = menssage
 
-        clearInterval(interval)
+        clearInterval(this.interval)
 
     },
 

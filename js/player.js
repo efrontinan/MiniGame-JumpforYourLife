@@ -55,7 +55,7 @@ class Player {
         movementLimitFrame.style.border = '2px solid yellow'
         movementLimitFrame.style.boxSizing = 'border-box'
 
-        document.querySelector("#game-screen").appendChild(movementLimitFrame);
+        document.querySelector("#game-screen").appendChild(movementLimitFrame)
     }
 
     moveLeft() {
@@ -85,10 +85,11 @@ class Player {
     updatePosition(currentPlatform) {
 
         if (!(this.playerPos.top === this.gameSize.height - this.playerSize.height - 20)) {
-            this.playerPos.left = currentPlatform.platformPos.left + (this.platformSize.width - this.playerSize.width) / 2
+
+            this.playerPos.left = currentPlatform[0].platformPos.left + (this.platformSize.width - this.playerSize.width) / 2
             this.player.style.left = `${this.playerPos.left}px`
 
-            this.playerPos.top = currentPlatform.platformPos.top + (this.platformSize.height - this.playerSize.height) / 2
+            this.playerPos.top = currentPlatform[0].platformPos.top + (this.platformSize.height - this.playerSize.height) / 2
             this.player.style.top = `${this.playerPos.top}px`
 
         }

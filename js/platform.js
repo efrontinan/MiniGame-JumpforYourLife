@@ -4,10 +4,10 @@ class Platform {
         this.uniqueId = uniqueId
 
         this.gameSize = gameSize
+        
+        this.rowNumber = rowNumber
 
         this.index = index
-
-        this.rowNumber = rowNumber
 
         this.type = type
 
