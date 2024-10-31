@@ -275,7 +275,7 @@ const Game = {
 
                 if (eachPlatform.type === 'weak') {
                     this.totalPoints--
-                    this.gameOver('Fuiste consumido, ¡Intentalo nuevamente!')
+                    this.gameOver('Fuiste consumido, ¡Intentalo nuevamente!', 'weakPlatform')
                 }
 
                 //No está detectando bien el already Collision
@@ -299,7 +299,7 @@ const Game = {
                 }))
             }
 
-            this.gameOver('Caíste en espacio vacio, ¡Intentalo nuevamente!')
+            this.gameOver('Caíste en espacio vacio, ¡Intentalo nuevamente!', 'notColling')
 
         }
 
@@ -369,7 +369,7 @@ const Game = {
 
         this.platformArray.forEach((eachPlatform) => {
 
-            if (this.framesCounter >= (-eachPlatform.initialLeft + 2*eachPlatform.distance)) {
+            if (this.framesCounter >= (-eachPlatform.initialLeft + 2 * eachPlatform.distance)) {
                 console.log(-eachPlatform.initialLeft + eachPlatform.distance / 2)
                 eachPlatform.revertDirection()
             }
@@ -378,7 +378,7 @@ const Game = {
             eachPlatform.platform.style.left = `${eachPlatform.platformPos.left}px`
         })
 
-        if (this.framesCounter >=  (-(this.platform.initialLeft) + 2*(this.platform.distance))) {
+        if (this.framesCounter >= (-(this.platform.initialLeft) + 2 * (this.platform.distance))) {
             this.framesCounter = 0
         }
 
@@ -398,7 +398,7 @@ const Game = {
         }
 
         if (exceedsRight || exceedsLeft) {
-            this.gameOver('Te excediste, intentalo nuevamente!')
+            this.gameOver('Te excediste, intentalo nuevamente!', 'exceedsPlayer')
         }
 
     },
@@ -414,11 +414,27 @@ const Game = {
 
     },
 
-    gameOver(menssage) {
+    gameOver(menssage, type) {
+        const audioElement = document.createElement("audio");
+
+        if (type == 'notColling') {
+            audioElement.src = "audio/soundFalls.mp3"
+            audioElement.volume = 1.0
+            audioElement.play()
+
+        } else if (type == 'weakPlatform') {
+            audioElement.src = "audio/soundGameOver.mp3"
+            audioElement.volume = 1.0
+            audioElement.play()
+
+        } else if (type == 'exceedsPlayer') {
+            audioElement.src = "audio/soundGameOver.mp3"
+            audioElement.volume = 1.0
+            audioElement.play()
+
+        }
 
         this.updateLocalStorage()
-
-
         document.getElementById("lose-modal").style.display = "flex"
         document.getElementById("jump-number-lose").innerHTML = this.totalPoints
         document.getElementById("loss-reason").innerHTML = menssage

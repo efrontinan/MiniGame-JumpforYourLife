@@ -65,6 +65,10 @@ class Player {
 
     moveUp() {
         this.playerPos.top -= this.gameSize.height / 5
+        const audioElement = document.createElement("audio");
+        audioElement.src = "audio/soundJump.mp3"
+        audioElement.play()
+
     }
 
     moveRight() {
