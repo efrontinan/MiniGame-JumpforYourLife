@@ -365,9 +365,12 @@ const Game = {
 
         this.framesCounter += 2
 
+        console.log('Frames', this.framesCounter)
+
         this.platformArray.forEach((eachPlatform) => {
 
-            if (this.framesCounter >= 3 * (-(eachPlatform.initialLeft) + (eachPlatform.distance / 2))) {
+            if (this.framesCounter >= (-eachPlatform.initialLeft + 2*eachPlatform.distance)) {
+                console.log(-eachPlatform.initialLeft + eachPlatform.distance / 2)
                 eachPlatform.revertDirection()
             }
 
@@ -375,7 +378,7 @@ const Game = {
             eachPlatform.platform.style.left = `${eachPlatform.platformPos.left}px`
         })
 
-        if (this.framesCounter >= 3 * (-(this.platform.initialLeft) + (this.platform.distance / 2))) {
+        if (this.framesCounter >=  (-(this.platform.initialLeft) + 2*(this.platform.distance))) {
             this.framesCounter = 0
         }
 

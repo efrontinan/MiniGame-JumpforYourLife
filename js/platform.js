@@ -25,7 +25,7 @@ class Platform {
 
         this.direction
 
-        this.initialLeft = (this.platformSize.width + this.distance) * -1
+        this.initialLeft = (this.platformSize.width + this.distance) * -2
 
         this.init()
     }
