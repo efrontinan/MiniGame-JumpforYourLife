@@ -159,20 +159,20 @@ const Game = {
         if (this.isColliding === true && this.alreadyCollision === true) {
 
             this.platformArray.forEach((eachPlatform) => {
-
-                eachPlatform.rowNumber -= 1
-                eachPlatform.updateTopPosition(eachPlatform.rowNumber)
-
+                eachPlatform.rowNumber -= 1;
+                eachPlatform.updateTopPosition(eachPlatform.rowNumber);
             })
 
-            for (let j = 0; j < (this.visiblePlatformNumer + 1); j++) {
+            this.currentRowNumber -= 1
 
-                console.log(this.currentRowNumber)
+            const lastRowNumber = this.platformArray[this.platformArray.length - 1].rowNumber;
 
-                const platform = new Platform(this.gameSize, (this.currentRowNumber), this.platformSpecs, this.getRandomType(), j, this.uniqueId)
-                this.platformArray.push(platform)
+            for (let j = 0; j < this.visiblePlatformNumer + 1; j++) {
 
-                this.uniqueId++
+                const platform = new Platform(this.gameSize, lastRowNumber + 1, this.platformSpecs, this.getRandomType(), j, this.uniqueId);
+                this.platformArray.push(platform);
+                this.uniqueId++;
+
             }
 
             this.currentRowNumber++
@@ -182,7 +182,6 @@ const Game = {
             // console.log('Array actualizado 2', this.platformArray)
 
         }
-
 
         // console.log('nuevo', this.currentRowNumber)
 
@@ -225,7 +224,6 @@ const Game = {
             }
 
         }
-
 
     },
 
