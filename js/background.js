@@ -84,4 +84,27 @@ class Background {
 
   }
 
+  resetPosition() {
+
+    this.background1.style.transition = "top 0s"
+    this.background2.style.transition = "top 0s"
+
+    this.backgroundPosition1 = {
+      left: 0,
+      top: this.backgroundSize.originalHeight - this.backgroundSize.height
+    }
+
+    this.backgroundPosition2 = {
+      left: 0,
+      top: this.backgroundPosition1.top - this.backgroundSize.height
+    }
+
+    this.background1.style.left = `${this.backgroundPosition1.left}px`;
+    this.background1.style.top = `${this.backgroundPosition1.top}px`;
+    
+    this.background2.style.left = `${this.backgroundPosition2.left}px`;
+    this.background2.style.top = `${this.backgroundPosition2.top}px`;
+    
+}
+
 }

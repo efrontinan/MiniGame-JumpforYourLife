@@ -24,7 +24,7 @@ const Game = {
     visibleRowNumber: 5,
     visiblePlatformNumer: 7,
 
-    currentRowNumber: 1,
+    currentRowNumber: 0,
 
     platformArray: [],
     uniqueId: 0,
@@ -138,11 +138,17 @@ const Game = {
                 this.uniqueId++
 
             }
+
+            this.currentRowNumber++
+
         }
 
-        this.currentRowNumber++
+    
 
         this.getStablePlatform()
+
+        console.log('Array original', this.platformArray)
+
 
     },
 
@@ -159,14 +165,20 @@ const Game = {
 
             for (let j = 0; j < this.visiblePlatformNumer; j++) {
 
+                console.log(this.currentRowNumber)
+
                 const platform = new Platform(this.gameSize, this.currentRowNumber, this.platformSpecs, this.getRandomType(), j, this.uniqueId)
                 this.platformArray.push(platform)
 
-                this.currentRowNumber++
                 this.uniqueId++
             }
 
+            this.currentRowNumber++
+
             this.isColliding = false
+            
+        console.log('Array actualizado 2', this.platformArray)
+
         }
     },
 
@@ -265,8 +277,6 @@ const Game = {
                 //No está detectando bien el already Collision
                 this.alreadyCollision = true
 
-                this.currentRowNumber ++
-
                 this.updateLocalStorage()
 
                 throw this.isColliding
@@ -311,6 +321,8 @@ const Game = {
 
         this.player.resetPosition()
 
+        this.background.resetPosition()
+
         this.platformArray.forEach(elm => {
             elm.platform.remove()
         })
@@ -329,6 +341,7 @@ const Game = {
         this.updateLocalStorage()
 
         this.printInfoJumps()
+
 
     },
 
