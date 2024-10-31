@@ -64,7 +64,7 @@ const Game = {
         this.startGameLoop()
         document.getElementById('start-modal').style.display = 'none'
 
-        const audioElement = document.createElement("audio");
+        const audioElement = document.createElement("audio")
         audioElement.src = "audio/soundStart.mp3"
         audioElement.play()
         audioElement.loop = true
@@ -157,24 +157,25 @@ const Game = {
 
             this.platformArray.forEach((eachPlatform) => {
                 eachPlatform.rowNumber -= 1;
-                eachPlatform.updateTopPosition(eachPlatform.rowNumber);
+                eachPlatform.updateTopPosition(eachPlatform.rowNumber)
             })
 
             this.currentRowNumber -= 1
 
-            const lastRowNumber = this.platformArray[this.platformArray.length - 1].rowNumber;
-
+            const lastRowNumber = this.platformArray[this.platformArray.length - 1].rowNumber
             for (let j = 0; j < this.visiblePlatformNumer + 1; j++) {
 
-                const platform = new Platform(this.gameSize, lastRowNumber + 1, this.platformSpecs, this.getRandomType(), j, this.uniqueId);
-                this.platformArray.push(platform);
-                this.uniqueId++;
+                const platform = new Platform(this.gameSize, lastRowNumber + 1, this.platformSpecs, this.getRandomType(), j, this.uniqueId)
+                this.platformArray.push(platform)
+                this.uniqueId++
 
             }
 
             this.currentRowNumber++
 
             this.isColliding = false
+
+            console.log(this.platformArray)
 
         }
 
@@ -352,12 +353,10 @@ const Game = {
 
         this.framesCounter += 2
 
-        console.log('Frames', this.framesCounter)
-
         this.platformArray.forEach((eachPlatform) => {
 
             if (this.framesCounter >= (-eachPlatform.initialLeft + 2 * eachPlatform.distance)) {
-                console.log(-eachPlatform.initialLeft + eachPlatform.distance / 2)
+
                 eachPlatform.revertDirection()
             }
 
