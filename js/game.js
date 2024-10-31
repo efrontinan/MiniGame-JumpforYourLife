@@ -143,16 +143,18 @@ const Game = {
 
         }
 
-    
-
         this.getStablePlatform()
 
-        console.log('Array original', this.platformArray)
-
+        console.log('basta')
 
     },
 
     createNewPlatforms() {
+
+        console.log('Array original', this.platformArray)
+
+
+        // console.log('antes: ', this.currentRowNumber)
 
         if (this.isColliding === true && this.alreadyCollision === true) {
 
@@ -163,11 +165,11 @@ const Game = {
 
             })
 
-            for (let j = 0; j < this.visiblePlatformNumer; j++) {
+            for (let j = 0; j < (this.visiblePlatformNumer + 1); j++) {
 
                 console.log(this.currentRowNumber)
 
-                const platform = new Platform(this.gameSize, this.currentRowNumber, this.platformSpecs, this.getRandomType(), j, this.uniqueId)
+                const platform = new Platform(this.gameSize, (this.currentRowNumber), this.platformSpecs, this.getRandomType(), j, this.uniqueId)
                 this.platformArray.push(platform)
 
                 this.uniqueId++
@@ -176,10 +178,14 @@ const Game = {
             this.currentRowNumber++
 
             this.isColliding = false
-            
-        console.log('Array actualizado 2', this.platformArray)
+
+            // console.log('Array actualizado 2', this.platformArray)
 
         }
+
+
+        // console.log('nuevo', this.currentRowNumber)
+
     },
 
     getStablePlatform() {
@@ -254,7 +260,7 @@ const Game = {
                 playerPos.top + playerSize.height > platformPos.top
             ) {
 
-                this.totalPoints ++
+                this.totalPoints++
                 this.isColliding = true
 
                 //Note: delete idx from currentPlatform
@@ -363,7 +369,7 @@ const Game = {
 
         this.platformArray.forEach((eachPlatform) => {
 
-            if (this.framesCounter >= 3*(-(eachPlatform.initialLeft) + (eachPlatform.distance / 2))) {
+            if (this.framesCounter >= 3 * (-(eachPlatform.initialLeft) + (eachPlatform.distance / 2))) {
                 eachPlatform.revertDirection()
             }
 
@@ -371,7 +377,7 @@ const Game = {
             eachPlatform.platform.style.left = `${eachPlatform.platformPos.left}px`
         })
 
-        if (this.framesCounter >= 3*(-(this.platform.initialLeft) + (this.platform.distance / 2))) {
+        if (this.framesCounter >= 3 * (-(this.platform.initialLeft) + (this.platform.distance / 2))) {
             this.framesCounter = 0
         }
 
@@ -383,11 +389,11 @@ const Game = {
         const exceedsLeft = this.player.playerPos.left + this.player.platformSize.width / 2 <= 0
 
         if (this.currentPlatform.length > 0) {
-            
+
             this.player.updatePosition(this.platformArray.filter(elm => {
                 return elm.uniqueId === this.currentPlatform[1]
             }))
-            
+
         }
 
         if (exceedsRight || exceedsLeft) {
