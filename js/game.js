@@ -57,6 +57,12 @@ const Game = {
 
     },
 
+    startGame() {
+
+        document.getElementById('start-modal').style.display = 'none'
+
+    },
+
     setEventListeners() {
 
         document.addEventListener("keydown", e => {
@@ -91,8 +97,8 @@ const Game = {
 
     printInfoJumps() {
 
-        document.getElementById("jump-max-number").innerHTML = localStorage.getItem('maxPoints');
-        document.getElementById("jump-number").innerHTML = this.totalPoints;
+        document.getElementById("jump-max-number").innerHTML = localStorage.getItem('maxPoints')
+        document.getElementById("jump-number").innerHTML = this.totalPoints
 
     },
 
@@ -100,7 +106,6 @@ const Game = {
 
         this.createElements()
         this.startGameLoop()
-        // alert('Los puntos maximos conseguidos son ' + localStorage.getItem('maxPoints'))
 
     },
 
@@ -237,7 +242,8 @@ const Game = {
                 this.alreadyCollision = true
 
                 if (eachPlatform.type === 'weak') {
-                    this.gameOver()
+                    this.totalPoints--
+                    this.gameOver('Fuiste consumido, ¡Intentalo nuevamente!')
                 }
                 throw this.isColliding
 
@@ -252,7 +258,7 @@ const Game = {
             if (this.currentPlatform.length > 0) {
                 this.player.updatePosition(this.platformArray[this.currentPlatform[0]])
             }
-            this.gameOver()
+            this.gameOver('Caíste en espacio vacio, ¡Intentalo nuevamente!')
         }
 
         return this.onPlatform
@@ -341,14 +347,12 @@ const Game = {
         }
 
         if (exceedsRight || exceedsLeft) {
-            this.gameOver()
+            this.gameOver('Te excediste, intentalo nuevamente!')
         }
 
     },
 
     clearAll() {
-
-        // console.log('Array antes: ', this.platformArray)
 
         this.platformArray.forEach((elem, idx) => {
             if (elem.rowNumber === -1) {
@@ -357,13 +361,14 @@ const Game = {
             }
         })
 
-        // console.log('Array despues: ', this.platformArray)
-
     },
 
-    gameOver() {
+    gameOver(menssage) {
 
         document.getElementById("lose-modal").style.display = "flex"
+        document.getElementById("jump-number-lose").innerHTML = this.totalPoints
+        document.getElementById("loss-reason").innerHTML = menssage
+
         clearInterval(interval)
 
     },

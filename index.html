@@ -5,22 +5,47 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Froggy Arcade</title>
+  <title>Froggy Arcade || Game</title>
+  <meta name="description"
+    content="¡Bienvenido a Froggy Arcade, el emocionante juego que pondrá a prueba tus habilidades y reflejos! Embarca en una aventura con nuestro carismático atrapafantasmas, superando obstáculos y recolectando objetos especiales en plataformas en movimiento." />
+  <link rel="icon" href="img/kimi-yip-evil-ghost-norm.gif" type="image/x-icon">
   <link rel="stylesheet" href="./css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
+
+  <div id="start-modal">
+    <div class="start-modal-content">
+      <img src="img/kimi-yip-evil-ghost-norm.gif" alt="Evil Ghost" class="game-logo" />
+      <div class="start-text">
+        <h1>¡Bienvenido a Froggy Arcade!</h1>
+        <p>Prepárate para un desafío increíble. Usa tus habilidades para evitar caer en los espacios vacíos y chocar con
+          el atrapafantasmas, llega lo más lejos posible.</p>
+
+        <div class="loading-animation"><span>Cargando...</span></div>
+
+        <button id="start-button" onclick="Game.startGame()" style="display: none;">
+          <span class="play-label">¡Jugar Ahora!</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <section class="container">
 
     <figure id="game-screen"></figure>
 
     <div class="details-content">
-
       <header>
         <h1>¡Bienvenido Jugador!</h1>
       </header>
 
       <div class="jun-content">
+
         <div id="jump-max">
           <h3>Saltos Máximos</h3>
           <div class="jump-display">
@@ -34,27 +59,59 @@
             <span id="jump-number">0</span>
           </div>
         </div>
+
       </div>
 
       <div id="instructions">
+
         <div class="card">
           <h2>Instrucciones</h2>
           <hr>
-          <p>Usa las flechas para mover a Froggy y saltar. ¡Evita los obstáculos y llega lo más lejos que puedas!</p>
+          <p>
+            Usa las flechas para mover a Froggy y saltar. ¡Evita caer en los espacios vacíos y chocar con el
+            atrapafantasmas, llega lo más lejos que puedas!
+          </p>
+
+          <div class="controls">
+            <span class="arrow"><i class="fas fa-arrow-left"></i></span>
+            <span class="arrow"><i class="fas fa-arrow-up"></i></span>
+            <span class="arrow"><i class="fas fa-arrow-right"></i></span>
+          </div>
+
         </div>
+
       </div>
 
     </div>
+
   </section>
 
   <div id="lose-modal">
-    <div>
-      <h2>Perdiste</h2>
-      <button class="button" onclick="Game.resetGame()">¡Jugar Nuevamente!</button>
+
+    <div class="modal-content">
+
+      <img src="img/kimi-yip-evil-ghost-death.gif" alt="Imagen de pérdida" class="lose-image">
+
+      <div class="text-content">
+        <h2>Perdiste (Saltos exitosos: <span id="jump-number-lose"></span>)</h2>
+        <p id="loss-reason"></p>
+        <button class="button" onclick="Game.resetGame()">¡Volver a jugar!</button>
+      </div>
+
     </div>
+
   </div>
 
+  <script>
 
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.querySelector('.loading-animation').style.display = 'none';
+        document.getElementById('start-button').style.display = 'block';
+      }, 3000);
+    });
+
+  </script>
   <script src="./js/platform.js"></script>
   <script src="./js/background.js"></script>
   <script src="./js/player.js"></script>
