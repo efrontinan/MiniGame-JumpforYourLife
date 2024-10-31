@@ -70,15 +70,26 @@ const Game = {
 
     setEventListeners() {
 
+        let moveFirstkey = false
+
         document.addEventListener("keydown", e => {
             switch (e.code) {
 
                 case this.keys.MOVEUP:
-                    this.player.moveUp()
-                    this.background.moveBackground()
-                    this.background.updateBackground()
-                    this.collisionDetection()
-                    break
+                    if (moveFirstkey) {
+
+                        this.player.moveUp()
+                        this.background.moveBackground()
+                        this.background.updateBackground()
+                        this.collisionDetection()
+
+                    } else {
+
+                        this.player.moveUp()
+                        this.collisionDetection()
+                        movefirst = true
+
+                    }
 
                 case this.keys.MOVERIGHT:
                     this.player.moveRight()

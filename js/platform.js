@@ -86,6 +86,7 @@ class Platform {
 
         this.platformPos.top = this.gameSize.height - ((this.gameSize.height / 5) * (updatedRowNumber + 1))
         this.platform.style.top = `${this.platformPos.top}px`
+        this.platform.style.transition = "top 3s"
 
     }
 

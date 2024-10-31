@@ -53,7 +53,7 @@ class Background {
       this.background2.style.height = `${this.backgroundSize.height}px`
       this.background2.style.left = `${this.backgroundPosition1.left}px`
       this.background2.style.top = `${this.backgroundPosition1.top}px`
-      
+
     }
 
   }
@@ -61,7 +61,7 @@ class Background {
 
   moveBackground() {
 
-    if(this.backgroundPosition1.top >= this.backgroundSize.originalHeight){
+    if (this.backgroundPosition1.top >= this.backgroundSize.originalHeight) {
 
       this.backgroundPosition1.top = this.backgroundSize.originalHeight - this.backgroundSize.height
       this.backgroundPosition2.top = this.backgroundPosition1.top - this.backgroundSize.height
@@ -79,6 +79,8 @@ class Background {
 
     this.background1.style.top = `${this.backgroundPosition1.top}px`
     this.background2.style.top = `${this.backgroundPosition2.top}px`
+    this.background1.style.transition = "top 3s"
+    this.background2.style.transition = "top 3s"
 
   }
 
