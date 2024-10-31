@@ -90,7 +90,7 @@ class Player {
 
             this.playerPos.top = currentPlatform.platformPos.top + (this.platformSize.height - this.playerSize.height) / 2
             this.player.style.top = `${this.playerPos.top}px`
-
+            this.player.style.transition = "top 3s"
         }
     }
 }
