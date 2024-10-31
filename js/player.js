@@ -39,8 +39,6 @@ class Player {
 
         document.querySelector("#game-screen").appendChild(this.player)
 
-        // Crear el marco de límite de salto
-        // this.createMovementLimitFrame();
     }
 
     createMovementLimitFrame() {

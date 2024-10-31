@@ -58,7 +58,6 @@ class Background {
 
   }
 
-
   moveBackground() {
 
     if (this.backgroundPosition1.top >= this.backgroundSize.originalHeight) {
@@ -104,7 +103,7 @@ class Background {
     
     this.background2.style.left = `${this.backgroundPosition2.left}px`;
     this.background2.style.top = `${this.backgroundPosition2.top}px`;
-    
+
 }
 
 }

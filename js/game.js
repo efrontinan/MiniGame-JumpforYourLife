@@ -5,7 +5,6 @@ const Game = {
     version: '1.0',
     license: undefined,
 
-
     gameSize: {
         width: 700,
         height: window.innerHeight,
@@ -59,12 +58,17 @@ const Game = {
 
     },
 
-
     start() {
 
         this.createElements()
         this.startGameLoop()
         document.getElementById('start-modal').style.display = 'none'
+
+        const audioElement = document.createElement("audio");
+        audioElement.src = "audio/soundStart.mp3"
+        audioElement.play()
+        audioElement.loop = true
+        audioElement.volume = 0.3
 
     },
 
@@ -145,16 +149,9 @@ const Game = {
 
         this.getStablePlatform()
 
-        console.log('basta')
-
     },
 
     createNewPlatforms() {
-
-        console.log('Array original', this.platformArray)
-
-
-        // console.log('antes: ', this.currentRowNumber)
 
         if (this.isColliding === true && this.alreadyCollision === true) {
 
@@ -179,11 +176,7 @@ const Game = {
 
             this.isColliding = false
 
-            // console.log('Array actualizado 2', this.platformArray)
-
         }
-
-        // console.log('nuevo', this.currentRowNumber)
 
     },
 
@@ -261,8 +254,6 @@ const Game = {
                 this.totalPoints++
                 this.isColliding = true
 
-                //Note: delete idx from currentPlatform
-
                 this.currentPlatform = [idx, eachPlatform.uniqueId, eachPlatform.visibleRowNumber, eachPlatform.index, platformPos.left, platformPos.top, eachPlatform.type]
 
                 if (this.currentPlatform.length > 0) {
@@ -275,10 +266,9 @@ const Game = {
 
                 if (eachPlatform.type === 'weak') {
                     this.totalPoints--
-                    this.gameOver('Fuiste consumido, ¡Intentalo nuevamente!', 'weakPlatform')
+                    this.gameOver('JAJAJAAJ Te lo avisamos, cuidado con caer atrapado... ¿Un nuevo intento?', 'weakPlatform')
                 }
 
-                //No está detectando bien el already Collision
                 this.alreadyCollision = true
 
                 this.updateLocalStorage()
@@ -299,7 +289,7 @@ const Game = {
                 }))
             }
 
-            this.gameOver('Caíste en espacio vacio, ¡Intentalo nuevamente!', 'notColling')
+            this.gameOver('Los fantasmas también pueden morir... ¡¡Se siente!!', 'notColling')
 
         }
 
@@ -310,9 +300,7 @@ const Game = {
     updateLocalStorage() {
 
         if (!localStorage.getItem('maxPoints') || Number(localStorage.getItem('maxPoints')) < this.totalPoints) {
-
             localStorage.setItem('maxPoints', this.totalPoints)
-
         }
 
     },
@@ -345,7 +333,6 @@ const Game = {
         this.updateLocalStorage()
 
         this.printInfoJumps()
-
 
     },
 
@@ -398,7 +385,7 @@ const Game = {
         }
 
         if (exceedsRight || exceedsLeft) {
-            this.gameOver('Te excediste, intentalo nuevamente!', 'exceedsPlayer')
+            this.gameOver('No te escapas... ¿crees que conseguirás llegar más lejos?', 'exceedsPlayer')
         }
 
     },

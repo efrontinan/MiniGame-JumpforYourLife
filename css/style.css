@@ -133,6 +133,7 @@ hr{
 
 .controls {
     display: flex;
+    gap: 16px;
     justify-content: center;
     margin-top: 10px;
 }
@@ -286,4 +287,9 @@ hr{
 #start-button:hover:before,
 #start-button:hover:after {
     transform: scale(1.1);
+}
+
+.highlight {
+    font-size: 24px;
+    color: #F39595;
 }
