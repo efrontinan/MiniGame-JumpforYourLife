@@ -87,9 +87,10 @@ const Game = {
 
                         this.player.moveUp()
                         this.collisionDetection()
-                        movefirst = true
+                        moveFirstkey = true
 
                     }
+                    break
 
                 case this.keys.MOVERIGHT:
                     this.player.moveRight()
@@ -165,7 +166,7 @@ const Game = {
                 this.uniqueId++
             }
 
-            this.isColliding === false
+            this.isColliding = false
         }
     },
 
@@ -241,7 +242,7 @@ const Game = {
                 playerPos.top + playerSize.height > platformPos.top
             ) {
 
-                this.totalPoints++
+                this.totalPoints ++
                 this.isColliding = true
 
                 //Note: delete idx from currentPlatform
@@ -265,6 +266,8 @@ const Game = {
                 this.alreadyCollision = true
 
                 this.currentRowNumber ++
+
+                this.updateLocalStorage()
 
                 throw this.isColliding
 
@@ -292,7 +295,7 @@ const Game = {
 
     updateLocalStorage() {
 
-        if (localStorage.getItem('maxPoints') < this.totalPoints) {
+        if (!localStorage.getItem('maxPoints') || Number(localStorage.getItem('maxPoints')) < this.totalPoints) {
 
             localStorage.setItem('maxPoints', this.totalPoints)
 
@@ -392,6 +395,9 @@ const Game = {
     },
 
     gameOver(menssage) {
+
+        this.updateLocalStorage()
+
 
         document.getElementById("lose-modal").style.display = "flex"
         document.getElementById("jump-number-lose").innerHTML = this.totalPoints

@@ -73,6 +73,9 @@ class Player {
     }
 
     resetPosition() {
+
+        this.player.style.transition = "top 0s"
+
         this.playerPos = {
             left: this.gameSize.width / 2 - this.playerSize.width,
             top: this.gameSize.height - this.playerSize.height - 20
@@ -91,7 +94,7 @@ class Player {
 
             this.playerPos.top = currentPlatform[0].platformPos.top + (this.platformSize.height - this.playerSize.height) / 2
             this.player.style.top = `${this.playerPos.top}px`
-            this.player.style.transition = "top 3s"
+            this.player.style.transition = "top 2s"
         }
     }
 }
