@@ -49,7 +49,7 @@ class Platform {
     createPlatform() {
 
         if (this.type === 'stable') {
-            this.platform.style.backgroundImage = "url('img/stable.png')"
+            this.platform.style.backgroundImage = "url('img/platform.png')"
             this.platform.style.backgroundSize = "cover";
             this.platform.style.backgroundRepeat = "no-repeat";
             this.platform.style.backgroundPosition = "center";

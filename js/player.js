@@ -61,19 +61,19 @@ class Player {
     moveLeft() {
         this.playerPos.top -= this.gameSize.height / 5
         this.playerPos.left -= (this.distance + this.platformSize.width)
+        this.moveSound()
     }
 
     moveUp() {
         this.playerPos.top -= this.gameSize.height / 5
-        const audioElement = document.createElement("audio");
-        audioElement.src = "audio/soundJump.mp3"
-        audioElement.play()
+        this.moveSound()
 
     }
 
     moveRight() {
         this.playerPos.top -= this.gameSize.height / 5
         this.playerPos.left += (this.distance + this.platformSize.width)
+        this.moveSound()
     }
 
     resetPosition() {
@@ -100,5 +100,11 @@ class Player {
             this.player.style.top = `${this.playerPos.top}px`
             this.player.style.transition = "top 1s"
         }
+    }
+
+    moveSound() {
+        const audioElement = document.createElement("audio");
+        audioElement.src = "audio/soundJump.mp3"
+        audioElement.play()
     }
 }

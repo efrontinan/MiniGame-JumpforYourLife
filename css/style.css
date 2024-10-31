@@ -4,39 +4,125 @@
 }
 
 body {
-    font-family: 'Press Start 2P', cursive;
-    background-color: rgba(75, 0, 130, 0.9);
+    font-family: "Archivo Narrow", sans-serif;
+    background-color: #060a0e;
     overflow: hidden;
     color: #f0f0f0;
-    font-size: 12px;
+    font-size: 20px;
 }
 
-.start-text h1,
-#jump-max h3,
-#jump-count h3 {
-    font-size: 1.5rem;
-    color: #4CAF50;
+h1 {
+    font-family: "Shadows Into Light", sans-serif;
+    font-size: 50px;
+    color: #F39595;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    text-align: center;
 }
 
-.jump-display,
-.start-text p,
-#instructions p {
-    font-size: 1rem;
-    color: #bbffbb;
-    line-height: 1.4;
+h3 {
+    font-size: 1.5rem;
+    color: #fff;
 }
 
-.button,
+h2 {
+    font-size: 2rem;
+    line-height: 140%;
+    color: #a975d1;
+}
+
+p{
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 120%;
+}
+
+span{
+    font-size: 32px;
+    line-height: 200%;
+}
+
+button {
+    background-color: #F39595;
+    border: none;
+    color: #f0f0f0;
+    padding: 15px 40px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.5rem;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-family: "Archivo Narrow", sans-serif;
+    font-size: 24px; 
+}
+
+button:hover {
+    background-color: #f36565;
+    transform: scale(1.05);
+}
+
+hr{
+    width: 100%;
+    border-top: 1px solid #f36565;
+}
+
 #start-button {
-    font-family: 'Press Start 2P', cursive;
-    font-size: 1.1rem;
+    cursor: pointer;
+    animation: moveButton 1s ease-in-out infinite;
 }
+
+#start-button{
+    display: none;
+}
+
+#instructions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+    width: 80%;
+    margin: 60px;
+    color: #fff;
+}
+
+.details-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 40%;
+}
+
+.jump-content{
+    display: flex;
+    gap: 24px;
+    align-items: center;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px;
+    gap: 16px;
+    border: 1px solid #a975d1;
+    border-radius: 10px;
+}
+
+.selected {
+    background-color: #a975d1;
+}
+
 
 .container {
     display: flex;
     align-items: center;
+    justify-content:space-around ;
 }
 
 #game-screen {
@@ -44,68 +130,6 @@ body {
     overflow: hidden;
 }
 
-.details-content {
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 20px;
-    background: rgba(51, 51, 51, 0.8);
-    border-radius: 10px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
-    width: 500px;
-    max-width: 80%;
-    margin: 20px auto;
-}
-
-header h1 {
-    margin-top: 16px;
-    font-size: 14px;
-    color: #4CAF50;
-    text-align: center;
-}
-
-#jump-max,
-#jump-count {
-    align-items: center;
-    background-color: #3333332e;
-    padding: 10px;
-    border-radius: 10px;
-    text-align: center;
-    margin-top: 10px;
-}
-
-#jump-max h3,
-#jump-count h3 {
-    font-size: 1.2rem;
-    margin-bottom: 25px;
-    color: #fff;
-}
-
-.jump-display {
-    margin-top: 10px;
-    padding: 15px;
-    font-size: 2rem;
-    color: #4CAF50;
-    border: 2px solid #4CAF50;
-    border-radius: 5px;
-}
-
-#instructions {
-    align-items: center;
-    text-align: center;
-    width: 80%;
-    margin-top: 20px;
-    color: #fff;
-}
-
-.card {
-    padding: 20px;
-    background-color: #3333332e;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-}
 
 .controls {
     display: flex;
@@ -119,9 +143,6 @@ header h1 {
     color: #fff;
 }
 
-.arrow:hover {
-    color: #0e73e4;
-}
 
 #lose-modal {
     display: none;
@@ -130,7 +151,8 @@ header h1 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgb(0 0 0 / 88%);
+    background-color: rgb(0 0 0 / 60%);
+    backdrop-filter: blur(5px);
     color: white;
     justify-content: center;
     align-items: center;
@@ -138,45 +160,20 @@ header h1 {
 }
 
 .modal-content {
-    background-color: #575757;
-    padding: 30px;
+    background-color: #060a0e;
+    border: 1px solid #a975d1;
+    padding: 60px;
+    gap: 24px;
     border-radius: 8px;
     display: flex;
     flex-direction: row;
     align-items: center;
-    max-width: 800px;
-    width: 90%;
+    width: 60%;
 }
 
 .text-content {
     flex: 1;
     margin-left: 20px;
-}
-
-.modal-content h2 {
-    margin: 0;
-    font-size: 2rem;
-    color: #fff;
-}
-
-.modal-content p {
-    margin: 10px 0;
-    font-size: 1.2rem;
-    color: #fff;
-}
-
-.button {
-    background-color: #4CAF50;
-    border: none;
-    color: white;
-    padding: 15px 40px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 1.5rem;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
 }
 
 .lose-image {
@@ -193,7 +190,7 @@ header h1 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(75, 0, 130, 0.9);
+    background-color: #060a0e;
     z-index: 1000;
 }
 
@@ -202,7 +199,7 @@ header h1 {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: rgb(78 19 138 / 90%);
+    /* background-color: rgb(78 19 138 / 90%); */
     padding: 30px;
     border-radius: 0;
     box-shadow: none;
@@ -210,6 +207,11 @@ header h1 {
     height: 100%;
     color: #ffffff;
     animation: fadeIn 0.5s ease-in-out;
+}
+
+.start-button{
+    line-height: 200%;
+    margin: 0;
 }
 
 .game-logo {
@@ -226,18 +228,8 @@ header h1 {
     text-align: center;
 }
 
-.start-text h1 {
-    font-size: 2.5rem;
-    color: #4CAF50;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-}
-
-.start-text p {
-    font-size: 1.1rem;
-    margin-bottom: 20px;
-    color: #bbbbbb;
-    line-height: 1.5;
+.start-text div {
+    padding: 32px;
 }
 
 .loading-animation {
@@ -246,7 +238,7 @@ header h1 {
     align-items: center;
     width: 100%;
     height: 50px;
-    background: linear-gradient(90deg, transparent, #4CAF50, transparent);
+    background: linear-gradient(90deg, #a975d1, #F39595, #a975d1);
     background-size: 300%;
     border-radius: 5px;
     animation: loadingEffect 1.5s infinite;
@@ -267,20 +259,6 @@ header h1 {
     }
 }
 
-#start-button {
-    background-color: #4CAF50;
-    border: 3px solid #ffffff;
-    padding: 10px 30px;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
-    border-radius: 0;
-    cursor: pointer;
-    animation: moveButton 1s ease-in-out infinite;
-    position: relative;
-    overflow: hidden;
-}
-
 .play-label {
     display: inline-block;
 }
@@ -299,22 +277,7 @@ header h1 {
     }
 }
 
-#start-button:hover {
-    background-color: #66bb6a;
-    transform: scale(1.05);
-}
 
-#start-button:before,
-#start-button:after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: -1;
-    transition: transform 0.2s;
-}
 
 #start-button:before {
     transform: scale(1.05);

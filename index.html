@@ -12,23 +12,27 @@
   <link rel="stylesheet" href="./css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Narrow:ital,wght@0,400..700;1,400..700&family=Shadows+Into+Light&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
   <div id="start-modal">
+
     <div class="start-modal-content">
       <img src="img/kimi-yip-evil-ghost-norm.gif" alt="Evil Ghost" class="game-logo" />
       <div class="start-text">
-        <h1>¡Bienvenido a Froggy Arcade!</h1>
-        <p>Prepárate para un desafío increíble. Usa tus habilidades para evitar caer en los espacios vacíos y chocar con
-          el atrapafantasmas, llega lo más lejos posible.</p>
+        
+        <h1>¡Jump for your life!</h1>
+        <div class="text">
+          <p>¿Cuánto podrás sobrevivir?</p>
+          <p> Consigue sobrevivir saltando sobre las plataformas pero... ¡ten cuidado con los cazafantasmas!</p>
+          <p> ¡Cuidado con los cazafantasmas! Si te lanzas sobre ellos, no podrás sobrevivir</p>
+        </div>
 
-        <div class="loading-animation"><span>Cargando...</span></div>
+        <div class="loading-animation"><span> Cargando... </span></div>
 
-        <button id="start-button" onclick="Game.start()" style="display: none;">
+        <button id="start-button" onclick="Game.start()">
           <span class="play-label">¡Jugar Ahora!</span>
         </button>
       </div>
@@ -40,22 +44,20 @@
     <figure id="game-screen"></figure>
 
     <div class="details-content">
-      <header>
         <h1>¡Bienvenido Jugador!</h1>
-      </header>
 
-      <div class="jun-content">
+      <div class="jump-content">
 
-        <div id="jump-max">
-          <h3>Saltos Máximos</h3>
-          <div class="jump-display">
+        <div class="card selected">
+          <h3>Record histórico</h3>
+          <div>
             <span id="jump-max-number">0</span>
           </div>
         </div>
 
-        <div id="jump-count">
-          <h3>Saltos Actuales</h3>
-          <div class="jump-display">
+        <div class="card">
+          <h3>Puntuación actual</h3>
+          <div>
             <span id="jump-number">0</span>
           </div>
         </div>
@@ -64,7 +66,6 @@
 
       <div id="instructions">
 
-        <div class="card">
           <h2>Instrucciones</h2>
           <hr>
           <p>
@@ -79,8 +80,6 @@
           </div>
 
         </div>
-
-      </div>
 
     </div>
 
