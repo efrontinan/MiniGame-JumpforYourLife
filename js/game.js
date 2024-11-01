@@ -24,6 +24,7 @@ const Game = {
     visiblePlatformNumer: 7,
 
     currentRowNumber: 0,
+    currentDirection: -1,
 
     platformArray: [],
     uniqueId: 0,
@@ -152,33 +153,28 @@ const Game = {
     },
 
     createNewPlatforms() {
-
-        if (this.isColliding === true && this.alreadyCollision === true) {
+        if (this.isColliding && this.alreadyCollision) {
 
             this.platformArray.forEach((eachPlatform) => {
-                eachPlatform.rowNumber -= 1;
+                eachPlatform.rowNumber -= 1
                 eachPlatform.updateTopPosition(eachPlatform.rowNumber)
             })
 
             this.currentRowNumber -= 1
 
             const lastRowNumber = this.platformArray[this.platformArray.length - 1].rowNumber
-            for (let j = 0; j < this.visiblePlatformNumer + 1; j++) {
 
+            for (let j = 0; j < this.visiblePlatformNumer; j++) {
                 const platform = new Platform(this.gameSize, lastRowNumber + 1, this.platformSpecs, this.getRandomType(), j, this.uniqueId)
+                platform.direction = this.currentDirection
                 this.platformArray.push(platform)
                 this.uniqueId++
-
             }
 
+            this.currentDirection *= -1
             this.currentRowNumber++
-
             this.isColliding = false
-
-            console.log(this.platformArray)
-
         }
-
     },
 
     getStablePlatform() {
@@ -401,7 +397,7 @@ const Game = {
     },
 
     gameOver(menssage, type) {
-        const audioElement = document.createElement("audio");
+        const audioElement = document.createElement("audio")
 
         if (type == 'notColling') {
             audioElement.src = "audio/soundFalls.mp3"
