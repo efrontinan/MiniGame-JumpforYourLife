@@ -1,39 +1,56 @@
-# Jump for Your Life
+![Jump for Your Life](https://res.cloudinary.com/dt9pviq34/image/upload/v1734630862/Arcade_Desktop_z6dtwo.png)
 
-## Descripción del Proyecto
+# Jump for Your Life  
 
-**Jump for Your Life** es un dinámico juego arcade desarrollado por Diego Silva y Elena Frontiñán. El objetivo principal del jugador es hacer que el personaje salte a través de diferentes plataformas para avanzar lo más lejos posible, acumulando puntos y evitando peligros. 
-Las plataformas, que pueden ser estables o débiles, agregan un nivel de dificultad y estrategia al juego. Con un diseño visual atractivo y controles intuitivos, **Jump for Your Life** es perfecto para quienes buscan un desafío adictivo y emocionante.
+<p align="center">
+  <a href="https://efrontinan.github.io/MiniGame-JumpforYourLife/" target="_blank">
+    <button type="button" style="background-color: #3571FC; color: #fff; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer;">
+      Play the Game
+    </button>
+  </a>
+</p>
 
-## Características
+## **Project Description**  
 
-- **Plataformas Dinámicas**: Existen plataformas estables y débiles. Las plataformas débiles colapsan al contacto, lo que añade un nivel de dificultad extra.
-- **Controles Simples e Intuitivos**: Usa las teclas de flecha para moverte y saltar a través de los niveles.
-- **Puntaje y Almacenamiento de Récords**: Guarda el puntaje máximo del jugador en el almacenamiento local del navegador.
-- **Sonido Inmersivo**: Incluye efectos de sonido que se activan en diferentes eventos del juego (inicio, colisión, game over).
-- **Detección de Colisiones Precisa**: La detección de colisiones garantiza que los movimientos sean realistas y añade un desafío estratégico.
+**Jump for Your Life** is a dynamic arcade game developed by **Diego Silva** and **Elena Frontiñán**. The main objective is to make the character jump across various platforms to progress as far as possible, earning points and avoiding hazards. The platforms, which can be stable or weak, add an extra layer of strategy and difficulty. With its visually appealing design and intuitive controls, **Jump for Your Life** is perfect for anyone seeking an addictive and thrilling challenge.
 
-## Estructura del Proyecto
+---
 
-El proyecto se organiza en un objeto `Game` que contiene toda la lógica y configuración del juego, así como diferentes archivos .js con cada una de las clases que los definen.
+## **Features**  
 
-### Métodos Clave
+- **Dynamic Platforms**: Stable and weak platforms. Weak platforms collapse upon contact, adding extra difficulty.  
+- **Simple and Intuitive Controls**: Use arrow keys to navigate and jump through levels.  
+- **Score and High Score Storage**: Keeps the highest score in the browser's local storage.  
+- **Immersive Sound**: Includes sound effects triggered during various in-game events (start, collision, game over).  
+- **Accurate Collision Detection**: Ensures realistic movements and adds strategic challenge.  
 
-1. **`init()`**: Configura el tamaño del área de juego, eventos y visualización del puntaje.
-2. **`start()`**: Inicia el juego ocultando la pantalla de inicio y reproduciendo el sonido inicial.
-3. **`setEventListeners()`**: Detecta teclas para el movimiento del personaje.
-4. **`createPlatforms()`**: Genera plataformas al inicio del juego.
-5. **`collisionDetection()`**: Verifica las colisiones entre el personaje y las plataformas.
-6. **`gameOver()`**: Termina el juego, muestra un mensaje y reproduce un sonido de fin.
-7. **`updateLocalStorage()`**: Guarda el puntaje más alto en el almacenamiento local.
-8. **`resetGame()`**: Reinicia el juego a su configuración inicial.
+---
 
-## Controles
+## **Project Structure**  
 
-- **Flecha Arriba**: Mover a la plataforma inmediatamente superior
-- **Flecha Derecha**: Mover a la plataforma superior y a la derecha
-- **Flecha Izquierda**: Mover a la plataforma superior y a la izquierda
+The project is organized around a `Game` object that contains all the game logic and configuration, along with separate `.js` files defining each class.
 
-## Créditos
+### **Key Methods**  
 
-Desarrollado por **Diego Silva** y **Elena Frontiñán**.
+1. **`init()`**: Sets up the game area size, events, and score display.  
+2. **`start()`**: Starts the game by hiding the start screen and playing the initial sound.  
+3. **`setEventListeners()`**: Detects key presses for character movement.  
+4. **`createPlatforms()`**: Generates platforms at the start of the game.  
+5. **`collisionDetection()`**: Checks for collisions between the character and platforms.  
+6. **`gameOver()`**: Ends the game, displays a message, and plays a game-over sound.  
+7. **`updateLocalStorage()`**: Saves the highest score in local storage.  
+8. **`resetGame()`**: Resets the game to its initial state.  
+
+---
+
+## **Controls**  
+
+- **Up Arrow**: Move to the platform directly above.  
+- **Right Arrow**: Move to the platform above and to the right.  
+- **Left Arrow**: Move to the platform above and to the left.  
+
+---
+
+## **Credits**  
+
+Developed by **Diego Silva** and **Elena Frontiñán**.
